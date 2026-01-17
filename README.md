@@ -367,4 +367,4 @@ Your full-stack e-commerce platform is complete and ready to:
 **Questions?** Check the documentation files in the root directory.
 
 **Happy coding!** 🚀💚
-**UqdWkTYCFk3kzdc9**
+**UqdWkTYCFk3kzdc9**"# deploy" 
