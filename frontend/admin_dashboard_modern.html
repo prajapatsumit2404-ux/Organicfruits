@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - OrganicFruits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-leaf text-green-600 text-2xl"></i>
+          <a href="index.html" class="text-2xl font-bold text-green-600">OrganicFruits</a>
+        </div>
+        <div class="flex items-center space-x-6">
+          <span id="admin-name" class="text-gray-700 font-semibold"></span>
+          <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-4xl font-bold mb-8">Admin Dashboard</h1>
+
+    <!-- Tab Navigation -->
+    <div class="bg-white rounded-lg shadow-md mb-8">
+      <div class="flex border-b">
+        <button onclick="switchTab('products')" class="flex-1 py-4 px-6 text-left font-semibold border-b-2 border-green-600">
+          <i class="fas fa-box mr-2"></i>Products
+        </button>
+        <button onclick="switchTab('orders')" class="flex-1 py-4 px-6 text-left font-semibold border-b-2 border-gray-300 hover:border-green-300">
+          <i class="fas fa-shopping-bag mr-2"></i>Orders
+        </button>
+        <button onclick="switchTab('users')" class="flex-1 py-4 px-6 text-left font-semibold border-b-2 border-gray-300 hover:border-green-300">
+          <i class="fas fa-users mr-2"></i>Users
+        </button>
+        <button onclick="switchTab('analytics')" class="flex-1 py-4 px-6 text-left font-semibold border-b-2 border-gray-300 hover:border-green-300">
+          <i class="fas fa-chart-bar mr-2"></i>Analytics
+        </button>
+      </div>
+    </div>
+
+    <!-- Products Tab -->
+    <div id="products-tab" class="tab-content">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Add Product Form -->
+        <div class="bg-white p-6 rounded-lg shadow-md h-fit">
+          <h2 class="text-2xl font-bold mb-4">Add New Product</h2>
+          <form id="product-form" class="space-y-4">
+            <div>
+              <label class="block font-semibold mb-2">Product Name *</label>
+              <input type="text" id="p-title" placeholder="e.g., Fresh Apples" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Category *</label>
+              <select id="p-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                <option value="">Select Category</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Citrus">Citrus</option>
+                <option value="Berries">Berries</option>
+                <option value="Tropical">Tropical</option>
+                <option value="Melons">Melons</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Price ($) *</label>
+              <input type="number" id="p-price" step="0.01" placeholder="2.99" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Stock Quantity *</label>
+              <input type="number" id="p-stock" placeholder="100" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Image URL *</label>
+              <input type="url" id="p-image" placeholder="https://..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Description</label>
+              <textarea id="p-desc" placeholder="Product description..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 h-20" ></textarea>
+            </div>
+            <div>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="p-featured" class="w-4 h-4"> Featured Product
+              </label>
+            </div>
+            <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-semibold">
+              <i class="fas fa-plus mr-2"></i>Add Product
+            </button>
+          </form>
+        </div>
+
+        <!-- Products List -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+          <h2 class="text-2xl font-bold mb-4">All Products</h2>
+          <div id="admin-products" class="space-y-4 max-h-[600px] overflow-y-auto">
+            <!-- Products will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Tab -->
+    <div id="orders-tab" class="tab-content hidden">
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">Order Management</h2>
+        <div id="admin-orders" class="overflow-x-auto">
+          <!-- Orders will be rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Tab -->
+    <div id="users-tab" class="tab-content hidden">
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">User Management</h2>
+        <div id="admin-users">
+          <!-- Users will be rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div id="analytics-tab" class="tab-content hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">Total Orders</p>
+              <p class="text-3xl font-bold text-green-600" id="stat-orders">0</p>
+            </div>
+            <i class="fas fa-shopping-bag text-4xl text-green-200"></i>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">Total Revenue</p>
+              <p class="text-3xl font-bold text-blue-600" id="stat-revenue">$0</p>
+            </div>
+            <i class="fas fa-dollar-sign text-4xl text-blue-200"></i>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">Total Products</p>
+              <p class="text-3xl font-bold text-purple-600" id="stat-products">0</p>
+            </div>
+            <i class="fas fa-box text-4xl text-purple-200"></i>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">Registered Users</p>
+              <p class="text-3xl font-bold text-orange-600" id="stat-users">0</p>
+            </div>
+            <i class="fas fa-users text-4xl text-orange-200"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold mb-4">Recent Orders</h3>
+          <div id="recent-orders" class="space-y-3">
+            <!-- Recent orders will be shown here -->
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold mb-4">Top Products</h3>
+          <div id="top-products" class="space-y-3">
+            <!-- Top products will be shown here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    let allProducts = [];
+    let allOrders = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check if user is admin
+      const user = getCurrentUser();
+      if (!user || !user.isAdmin) {
+        alert('Access Denied: Admin privileges required');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      document.getElementById('admin-name').textContent = user.name || user.email;
+
+      // Load dashboard data
+      await loadDashboardData();
+      setupProductForm();
+    });
+
+    async function loadDashboardData() {
+      try {
+        allProducts = await getProducts();
+        allOrders = await getOrders();
+        renderAdminProducts();
+        renderAdminOrders();
+        renderAdminUsers();
+        updateAnalytics();
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        alert('Error loading dashboard: ' + error.message);
+      }
+    }
+
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.add('hidden');
+      });
+      // Show selected tab
+      document.getElementById(tabName + '-tab').classList.remove('hidden');
+    }
+
+    function setupProductForm() {
+      document.getElementById('product-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const product = {
+          title: document.getElementById('p-title').value,
+          category: document.getElementById('p-category').value,
+          price: parseFloat(document.getElementById('p-price').value),
+          stock: parseInt(document.getElementById('p-stock').value),
+          image: document.getElementById('p-image').value,
+          description: document.getElementById('p-desc').value,
+          featured: document.getElementById('p-featured').checked
+        };
+
+        try {
+          const newProduct = await addProduct(product);
+          alert('✓ Product added successfully!');
+          document.getElementById('product-form').reset();
+          await loadDashboardData();
+        } catch (error) {
+          alert('❌ Error adding product: ' + error.message);
+        }
+      });
+    }
+
+    async function renderAdminProducts() {
+      const container = document.getElementById('admin-products');
+      if (!container) return;
+
+      if (allProducts.length === 0) {
+        container.innerHTML = '<p class="text-gray-500">No products yet</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      allProducts.forEach(p => {
+        container.insertAdjacentHTML('beforeend', `
+          <div class="bg-gray-50 p-4 rounded border hover:border-green-300 transition-colors">
+            <div class="flex gap-3">
+              <img src="${p.image}" alt="${p.title}" class="h-16 w-16 object-cover rounded">
+              <div class="flex-1">
+                <h4 class="font-semibold">${p.title}</h4>
+                <p class="text-sm text-gray-600">${p.category}</p>
+                <div class="flex justify-between items-center mt-2">
+                  <span class="text-green-600 font-bold">$${p.price.toFixed(2)}</span>
+                  <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Stock: ${p.stock}</span>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="deleteProduct('${p._id}'); loadDashboardData()" class="text-red-600 hover:text-red-700">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    }
+
+    async function renderAdminOrders() {
+      const container = document.getElementById('admin-orders');
+      if (!container) return;
+
+      if (allOrders.length === 0) {
+        container.innerHTML = '<p class="text-gray-500">No orders yet</p>';
+        return;
+      }
+
+      const html = `
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100 border">
+              <th class="border p-3 text-left">Order ID</th>
+              <th class="border p-3 text-left">Total</th>
+              <th class="border p-3 text-left">Status</th>
+              <th class="border p-3 text-left">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${allOrders.map(o => `
+              <tr class="border hover:bg-gray-50">
+                <td class="border p-3 font-mono text-sm">${o._id.substring(0, 8)}...</td>
+                <td class="border p-3 text-green-600 font-bold">${formatCurrency(o.totalPrice)}</td>
+                <td class="border p-3">
+                  <span class="px-3 py-1 rounded text-xs font-semibold ${o.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
+                    ${o.status}
+                  </span>
+                </td>
+                <td class="border p-3 text-sm">${new Date(o.createdAt).toLocaleDateString()}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      container.innerHTML = html;
+    }
+
+    async function renderAdminUsers() {
+      const container = document.getElementById('admin-users');
+      if (!container) return;
+      container.innerHTML = '<p class="text-gray-500">User data managed through authentication system</p>';
+    }
+
+    async function updateAnalytics() {
+      const orderCount = allOrders.length;
+      const revenue = allOrders.reduce((sum, o) => sum + o.totalPrice, 0);
+      const productCount = allProducts.length;
+      const userCount = allOrders.length > 0 ? [...new Set(allOrders.map(o => o.userId))].length : 1;
+
+      document.getElementById('stat-orders').textContent = orderCount;
+      document.getElementById('stat-revenue').textContent = formatCurrency(revenue);
+      document.getElementById('stat-products').textContent = productCount;
+      document.getElementById('stat-users').textContent = userCount;
+
+      // Recent orders
+      const recentOrders = allOrders.slice(0, 5);
+      document.getElementById('recent-orders').innerHTML = recentOrders.map(o => `
+        <div class="flex justify-between items-center p-3 border-b">
+          <div>
+            <p class="font-semibold">${o._id.substring(0, 8)}...</p>
+            <p class="text-xs text-gray-500">${new Date(o.createdAt).toLocaleDateString()}</p>
+          </div>
+          <p class="text-green-600 font-bold">${formatCurrency(o.totalPrice)}</p>
+        </div>
+      `).join('') || '<p class="text-gray-500">No orders</p>';
+
+      // Top products
+      document.getElementById('top-products').innerHTML = allProducts.slice(0, 5).map(p => `
+        <div class="flex justify-between items-center p-3 border-b">
+          <p class="font-semibold">${p.title}</p>
+          <span class="text-green-600 font-bold">${formatCurrency(p.price)}</span>
+        </div>
+      `).join('') || '<p class="text-gray-500">No products</p>';
+    }
+  </script>
+</body>
+</html>

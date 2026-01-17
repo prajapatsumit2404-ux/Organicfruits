@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product - OG Organic Fruits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50">
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-leaf text-green-600 text-3xl"></i>
+          <a href="index.html" class="text-2xl font-bold text-green-600">OG Organic Fruits</a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <a href="cart.html" class="relative text-gray-700 hover:text-green-600 transition">
+            <i class="fas fa-shopping-cart text-2xl"></i>
+            <span id="cart-count"
+              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">0</span>
+          </a>
+
+          <div id="auth-buttons">
+            <a href="login.html"
+              class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-semibold">
+              <i class="fas fa-user mr-2"></i>Login
+            </a>
+          </div>
+
+          <div id="user-menu" class="hidden relative">
+            <button onclick="toggleUserDropdown()" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
+              <i class="fas fa-user-circle text-2xl"></i>
+              <span id="user-name" class="font-semibold"></span>
+              <i class="fas fa-chevron-down text-xs"></i>
+            </button>
+            <div id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 z-50">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-3 gap-10">
+        <div class="col-span-2 bg-white rounded-2xl shadow p-6">
+          <div class="flex gap-6">
+            <img id="product-image" src="assets/images/apple.svg" alt="product"
+              class="w-64 h-64 object-contain rounded-lg">
+            <div>
+              <h1 id="product-name" class="text-3xl font-bold text-gray-800">Organic Apple</h1>
+              <p id="product-desc" class="text-gray-600 mt-4">Fresh organic apples from local farms.</p>
+              <div class="mt-6 flex items-center gap-6">
+                <div class="text-2xl font-bold text-green-600" id="product-price">₹120/kg</div>
+                <div class="flex items-center gap-2">
+                  <button onclick="changeQty(-1)" class="bg-gray-200 p-2 rounded-full"><i
+                      class="fas fa-minus"></i></button>
+                  <span id="qty" class="px-4">1</span>
+                  <button onclick="changeQty(1)" class="bg-gray-200 p-2 rounded-full"><i
+                      class="fas fa-plus"></i></button>
+                </div>
+              </div>
+              <div class="mt-6 flex gap-4">
+                <button onclick="addToCart()"
+                  class="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition">
+                  <i class="fas fa-cart-plus mr-2"></i>Add To Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="bg-white rounded-2xl shadow p-6">
+          <h3 class="text-xl font-bold mb-4">Product Details</h3>
+          <ul class="text-gray-600 space-y-2">
+            <li>Farm Fresh</li>
+            <li>Pesticide Free</li>
+            <li>Net Weight: 1 kg</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    let currentQty = 1;
+    let currentProduct = null;
+
+    async function initProduct() {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id') || 'p1';
+      try {
+        const products = await getProducts();
+        currentProduct = products.find(p => p.id === productId) || products[0];
+        if (currentProduct) {
+          document.getElementById('product-name').textContent = currentProduct.name;
+          document.getElementById('product-desc').textContent = currentProduct.description;
+          document.getElementById('product-price').textContent = `₹${currentProduct.price}/${currentProduct.unit}`;
+          document.getElementById('product-image').src = currentProduct.image;
+        }
+      } catch (e) { console.error(e); }
+    }
+
+    function changeQty(delta) {
+      currentQty = Math.max(1, currentQty + delta);
+      document.getElementById('qty').textContent = currentQty;
+    }
+
+    function addToCart() {
+      if (!currentProduct) return;
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const existing = cart.find(i => i.id === currentProduct.id);
+      if (existing) {
+        existing.quantity += currentQty;
+      } else {
+        cart.push({ ...currentProduct, quantity: currentQty });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      alert('✓ Added to cart!');
+    }
+
+    document.addEventListener('DOMContentLoaded', initProduct);
+  </script>
+</body>
+
+</html>

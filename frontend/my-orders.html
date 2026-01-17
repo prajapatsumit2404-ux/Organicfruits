@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>My Orders — OG Organic Fruits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-leaf text-green-600 text-2xl"></i>
+        <a href="index.html" class="text-2xl font-bold text-green-600">OrganicFruits</a>
+      </div>
+
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="text-gray-700 hover:text-green-600">Home</a>
+        <a href="shop.html" class="text-gray-700 hover:text-green-600">Shop</a>
+        <a href="about.html" class="text-gray-700 hover:text-green-600">About</a>
+        <a href="services.html" class="text-gray-700 hover:text-green-600">Services</a>
+        <a href="cart.html" class="relative text-gray-700 hover:text-green-600">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="cart-count"
+            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">0</span>
+        </a>
+
+        <div id="auth-buttons">
+          <a href="login.html" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Login</a>
+        </div>
+
+        <div id="user-menu" class="hidden relative">
+          <button onclick="toggleUserDropdown()" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
+            <i class="fas fa-user-circle text-2xl"></i>
+            <span id="user-name" class="font-semibold"></span>
+            <i class="fas fa-chevron-down text-xs"></i>
+          </button>
+          <div id="user-dropdown"
+            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 z-50">
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="max-w-4xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">My Orders</h1>
+
+    <section class="mb-6">
+      <h2 class="font-semibold">Place a quick order</h2>
+      <form id="order-form" class="bg-white p-4 rounded shadow">
+        <input id="item-name" placeholder="Item name" class="w-full p-2 border rounded mb-2">
+        <input id="item-qty" type="number" placeholder="Quantity" class="w-32 p-2 border rounded mb-2">
+        <input id="item-price" type="number" placeholder="Price" class="w-32 p-2 border rounded mb-2">
+        <button class="px-4 py-2 bg-green-600 text-white rounded" type="submit">Place Order</button>
+        <div id="order-msg" class="mt-2 text-sm"></div>
+      </form>
+    </section>
+
+    <section>
+      <h2 class="font-semibold mb-2">Your orders</h2>
+      <div id="orders-list" class="space-y-4"></div>
+    </section>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    const API = '/api';
+    function token() { return localStorage.getItem('token'); }
+    document.getElementById('order-form').addEventListener('submit', async e => {
+      e.preventDefault(); const name = document.getElementById('item-name').value; const qty = Number(document.getElementById('item-qty').value || 1); const price = Number(document.getElementById('item-price').value || 0);
+      const msg = document.getElementById('order-msg'); try {
+        const res = await fetch(`${API}/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token() }, body: JSON.stringify({ items: [{ name, qty, price }], total: qty * price }) });
+        const data = await res.json(); if (res.ok) { msg.textContent = 'Order placed'; loadOrders(); } else { msg.textContent = data.error || 'Failed'; }
+      } catch (err) { msg.textContent = 'Network error'; }
+    });
+
+    async function loadOrders() {
+      const list = document.getElementById('orders-list'); list.innerHTML = '';
+      try {
+        const res = await fetch(`${API}/orders`, { headers: { 'Authorization': 'Bearer ' + token() } });
+        if (!res.ok) { list.textContent = 'Login to view orders'; return; }
+        const orders = await res.json(); if (orders.length === 0) { list.textContent = 'No orders yet.'; return; }
+        orders.forEach(o => {
+          const card = document.createElement('div'); card.className = 'bg-white p-4 rounded shadow';
+          const created = new Date(o.createdAt || Date.now()).toLocaleString('en-IN');
+          // build items list with INR formatting
+          const items = (o.items || []).map(it => {
+            const qty = Number(it.qty || it.quantity || 1);
+            const price = Number(it.price || it.rate || 0);
+            const lineTotal = qty * price;
+            const priceStr = lineTotal.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+            return `
+              <li class="text-gray-700">• ${it.name} × ${qty} — ${priceStr}</li>`;
+          }).join('');
+
+          // compute total (fallback to o.total if present)
+          const computedTotal = (o.total && Number(o.total)) || (o.items || []).reduce((s, it) => s + (Number(it.qty || it.quantity || 1) * Number(it.price || it.rate || 0)), 0);
+          const totalStr = Number(computedTotal).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+
+          card.innerHTML = `
+            <div class="font-bold">Order ${o._id || o.id} — ${o.status || 'pending'}</div>
+            <div class="text-sm text-gray-600">${created}</div>
+            <ul class="mt-2">${items}</ul>
+            <div class="mt-2 font-semibold">Total: ${totalStr}</div>`;
+          list.appendChild(card);
+        });
+      } catch (err) { list.textContent = 'Network error'; }
+    }
+
+    loadOrders();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact Us — Organic Fruits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-leaf text-green-600 text-2xl"></i>
+        <a href="index.html" class="text-2xl font-bold text-green-600">OrganicFruits</a>
+      </div>
+
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="text-gray-700 hover:text-green-600">Home</a>
+        <a href="shop.html" class="text-gray-700 hover:text-green-600">Shop</a>
+        <a href="about.html" class="text-gray-700 hover:text-green-600">About</a>
+        <a href="services.html" class="text-gray-700 hover:text-green-600">Services</a>
+        <a href="contact.html" class="text-green-600 font-semibold">Contact</a>
+
+        <div id="auth-buttons">
+          <a href="login.html" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Login</a>
+        </div>
+
+        <div id="user-menu" class="hidden relative">
+          <button onclick="toggleUserDropdown()" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
+            <i class="fas fa-user-circle text-2xl"></i>
+            <span id="user-name" class="font-semibold"></span>
+            <i class="fas fa-chevron-down text-xs"></i>
+          </button>
+          <div id="user-dropdown"
+            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 z-50">
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4 py-10">
+    <h1 class="text-4xl font-bold text-green-700 mb-6">Contact Us</h1>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <section class="bg-white p-6 rounded shadow">
+        <h2 class="text-2xl font-semibold mb-4">Get in Touch</h2>
+        <form class="space-y-4">
+          <div>
+            <label class="block font-semibold mb-2">Name</label>
+            <input type="text" class="w-full border p-3 rounded" placeholder="Your name" required>
+          </div>
+          <div>
+            <label class="block font-semibold mb-2">Email</label>
+            <input type="email" class="w-full border p-3 rounded" placeholder="your@email.com" required>
+          </div>
+          <div>
+            <label class="block font-semibold mb-2">Message</label>
+            <textarea class="w-full border p-3 rounded h-32" placeholder="Your message..." required></textarea>
+          </div>
+          <button class="w-full bg-green-600 text-white px-6 py-3 rounded font-semibold">Send Message</button>
+        </form>
+      </section>
+
+      <section>
+        <div class="bg-white p-6 rounded shadow mb-6">
+          <h3 class="text-xl font-semibold mb-4">Contact Information</h3>
+          <div class="space-y-4 text-gray-700">
+            <div>
+              <p class="font-semibold">Address</p>
+              <p>Bharwarnkua Square Near Police Station<br>Indore, 452001</p>
+            </div>
+            <div>
+              <p class="font-semibold">Phone</p>
+              <p>+91 9926700362 <br>+91 8269973723 <br>+91 9111481223</p>
+            </div>
+            <div>
+              <p class="font-semibold">Email</p>
+              <p>prajapatsumit2404@gmail.com</p>
+            </div>
+            <div>
+              <p class="font-semibold">Hours</p>
+              <p>sunday-sunday: 9 AM - 10 PM<br></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded shadow">
+          <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+          <div class="space-y-2">
+            <a href="#" class="block text-green-600 hover:underline">Facebook</a>
+            <a href="#" class="block text-green-600 hover:underline">Instagram</a>
+            <a href="#" class="block text-green-600 hover:underline">Twitter</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => updateNavAuth());
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "6d1d3f77-c260-47de-8b7a-a636e098b681",
+    "userId": "2a9afb4e-d888-4253-8440-0ad253012095",
+    "title": "Weekly Groceries",
+    "items": [
+      "Apples",
+      "Bananas",
+      "Milk"
+    ],
+    "createdAt": "2026-01-02T19:53:23.487Z"
+  }
+]

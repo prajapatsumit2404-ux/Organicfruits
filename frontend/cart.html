@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart - OG Organic Fruits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cart-item {
+      animation: slideIn 0.3s ease-out;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-leaf text-green-600 text-3xl"></i>
+          <a href="index.html" class="text-2xl font-bold text-green-600">OG Organic Fruits</a>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <a href="index.html" class="text-gray-700 hover:text-green-600">Home</a>
+          <a href="shop.html" class="text-gray-700 hover:text-green-600">Shop</a>
+          <a href="cart.html" class="text-green-600 font-semibold relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="cart-count"
+              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">0</span>
+          </a>
+
+          <div id="auth-buttons">
+            <a href="login.html" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Login</a>
+          </div>
+
+          <div id="user-menu" class="hidden relative">
+            <button onclick="toggleUserDropdown()" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
+              <i class="fas fa-user-circle text-2xl"></i>
+              <span id="user-name" class="font-semibold"></span>
+              <i class="fas fa-chevron-down text-xs"></i>
+            </button>
+            <div id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 z-50">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Cart Section -->
+  <section class="py-12 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold text-gray-800 mb-8">
+        <i class="fas fa-shopping-cart text-green-600 mr-3"></i>Shopping Cart
+      </h1>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+
+        <!-- Cart Items -->
+        <div class="lg:col-span-2">
+          <div id="cart-items" class="space-y-4">
+            <!-- Cart items will be loaded here -->
+          </div>
+
+          <div id="empty-cart" class="hidden bg-white rounded-2xl shadow-lg p-12 text-center">
+            <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-2xl font-bold text-gray-600 mb-2">Your cart is empty</h3>
+            <p class="text-gray-500 mb-6">Add some delicious fruits to get started!</p>
+            <a href="shop.html"
+              class="inline-block bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-full font-bold hover:from-green-700 hover:to-green-800 transition">
+              <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
+            </a>
+          </div>
+
+          <div id="loading" class="bg-white rounded-2xl shadow-lg p-12 text-center">
+            <i class="fas fa-spinner fa-spin text-6xl text-green-600 mb-4"></i>
+            <p class="text-xl text-gray-600">Loading your cart...</p>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-2xl shadow-lg p-8 sticky top-24">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Order Summary</h2>
+
+            <div class="space-y-4 mb-6">
+              <div class="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span id="subtotal">$0.00</span>
+              </div>
+              <div class="flex justify-between text-gray-600">
+                <span>Delivery Fee</span>
+                <span id="delivery-fee">$5.00</span>
+              </div>
+              <div class="flex justify-between text-gray-600">
+                <span>Tax (10%)</span>
+                <span id="tax">$0.00</span>
+              </div>
+              <div class="border-t-2 border-gray-200 pt-4">
+                <div class="flex justify-between text-xl font-bold text-gray-800">
+                  <span>Total</span>
+                  <span id="total" class="text-green-600">$0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="mb-6">
+              <label class="block text-gray-700 font-semibold mb-2">Promo Code</label>
+              <div class="flex gap-2">
+                <input type="text" id="promo-code" placeholder="Enter code"
+                  class="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-500">
+                <button onclick="applyPromo()"
+                  class="bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-900 transition">
+                  Apply
+                </button>
+              </div>
+            </div>
+
+            <!-- Checkout Button -->
+            <button onclick="proceedToCheckout()" id="checkout-btn"
+              class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 rounded-full font-bold text-lg transition transform hover:scale-105 mb-4">
+              <i class="fas fa-lock mr-2"></i>Proceed to Checkout
+            </button>
+
+            <a href="shop.html" class="block text-center text-green-600 font-semibold hover:underline">
+              <i class="fas fa-arrow-left mr-2"></i>Continue Shopping
+            </a>
+
+            <!-- Trust Badges -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+              <div class="flex items-center gap-3 text-sm text-gray-600 mb-2">
+                <i class="fas fa-shield-alt text-green-600"></i>
+                <span>Secure Checkout</span>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-gray-600 mb-2">
+                <i class="fas fa-truck text-green-600"></i>
+                <span>Free Delivery on Orders $50+</span>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-gray-600">
+                <i class="fas fa-undo text-green-600"></i>
+                <span>Easy Returns</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Checkout Modal -->
+  <div id="checkout-modal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 max-h-screen overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Checkout</h2>
+        <button onclick="closeCheckout()" class="text-gray-500 hover:text-gray-700 text-2xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form onsubmit="placeOrder(event)">
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+          <input type="text" id="checkout-name" required
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-500">
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Phone Number</label>
+          <input type="tel" id="checkout-phone" required
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-500">
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Delivery Address</label>
+          <textarea id="checkout-address" required rows="3"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-500"></textarea>
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Payment Method</label>
+          <select id="payment-method"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-500">
+            <option value="cod">Cash on Delivery</option>
+            <option value="card">Credit/Debit Card</option>
+            <option value="upi">UPI Payment</option>
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Order Notes (Optional)</label>
+          <textarea id="order-notes" rows="2" placeholder="Any special instructions..."
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-500"></textarea>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg mb-6">
+          <div class="flex justify-between font-bold text-lg">
+            <span>Total Amount:</span>
+            <span id="modal-total" class="text-green-600">$0.00</span>
+          </div>
+        </div>
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 rounded-full font-bold text-lg transition">
+          <i class="fas fa-check-circle mr-2"></i>Place Order
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    const API_URL = '/api';
+    let cartData = { items: [], total: 0 };
+
+    function fmtINR(value) { return Number(value || 0).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }); }
+
+    async function loadCart() {
+      // Immediate local render first for fastest UI response
+      const local = JSON.parse(localStorage.getItem('cart') || '[]');
+      if (local.length > 0) {
+        cartData.items = local.map(i => ({ ...i, quantity: Number(i.quantity || i.qty || 1), price: Number(i.price || i.rate || 0) }));
+        displayCart();
+        document.getElementById('loading').classList.add('hidden');
+      }
+
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await fetch(`${API_URL}/cart`, { headers: { 'Authorization': `Bearer ${token}` } });
+          if (response.ok) {
+            const serverData = await response.json();
+            if (serverData.items && serverData.items.length > 0) {
+              cartData = serverData;
+              cartData.items = cartData.items.map(i => ({ ...i, quantity: Number(i.quantity || i.qty || 1), price: Number(i.price || i.rate || 0) }));
+              displayCart();
+            }
+          }
+        } catch (error) { console.warn('Server sync skipped'); }
+      }
+
+      document.getElementById('loading').classList.add('hidden');
+      if (!cartData.items || cartData.items.length === 0) {
+        document.getElementById('empty-cart').classList.remove('hidden');
+      }
+    }
+
+    function displayCart() {
+      const container = document.getElementById('cart-items');
+      const emptyCart = document.getElementById('empty-cart');
+      if (!cartData.items || cartData.items.length === 0) { container.innerHTML = ''; emptyCart.classList.remove('hidden'); document.getElementById('checkout-btn').disabled = true; return; }
+      emptyCart.classList.add('hidden');
+      container.innerHTML = cartData.items.map((item, index) => `
+        <div class="cart-item bg-white rounded-2xl shadow-lg p-6 flex items-center gap-6">
+          <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-cover rounded-lg">
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">${item.name}</h3>
+            <p class="text-gray-600 mb-2">Price: ${fmtINR(item.price)}</p>
+            <div class="flex items-center gap-4">
+              <button onclick="updateQuantity(${index}, -1)" class="bg-gray-200 hover:bg-gray-300 w-8 h-8 rounded-full font-bold transition"><i class="fas fa-minus"></i></button>
+              <span class="font-bold text-lg">${item.quantity}</span>
+              <button onclick="updateQuantity(${index}, 1)" class="bg-gray-200 hover:bg-gray-300 w-8 h-8 rounded-full font-bold transition"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-2xl font-bold text-green-600 mb-4">${fmtINR(item.price * item.quantity)}</p>
+            <button onclick="removeItem(${index})" class="text-red-600 hover:text-red-700 font-semibold transition"><i class="fas fa-trash mr-2"></i>Remove</button>
+          </div>
+        </div>
+      `).join('');
+      updateSummary();
+    }
+
+    function updateQuantity(index, change) { cartData.items[index].quantity += change; if (cartData.items[index].quantity <= 0) { removeItem(index); return; } displayCart(); saveCart(); }
+    function removeItem(index) { if (confirm('Remove this item from cart?')) { cartData.items.splice(index, 1); displayCart(); saveCart(); updateCartCount(); } }
+    function updateSummary() { const subtotal = cartData.items.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item.quantity || 0)), 0); const deliveryFee = subtotal >= 5000 ? 0 : 50; const tax = subtotal * 0.1; const total = subtotal + deliveryFee + tax; document.getElementById('subtotal').textContent = fmtINR(subtotal); document.getElementById('delivery-fee').textContent = deliveryFee === 0 ? 'FREE' : fmtINR(deliveryFee); document.getElementById('tax').textContent = fmtINR(tax); document.getElementById('total').textContent = fmtINR(total); document.getElementById('modal-total').textContent = fmtINR(total); cartData.total = total; }
+    async function saveCart() { const token = localStorage.getItem('token'); try { localStorage.setItem('cart', JSON.stringify(cartData.items || [])); } catch (e) { } if (!token) return; try { await fetch(`${API_URL}/cart/update`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(cartData) }); } catch (error) { console.error('Error saving cart to server:', error); } }
+    function updateCartCount() { const totalItems = (cartData.items || []).reduce((s, it) => s + (Number(it.quantity || it.qty || 0)), 0); document.getElementById('cart-count').textContent = totalItems; }
+    function proceedToCheckout() { if (!cartData.items || cartData.items.length === 0) { alert('Your cart is empty!'); return; } document.getElementById('checkout-modal').classList.remove('hidden'); const user = JSON.parse(localStorage.getItem('user') || '{}'); document.getElementById('checkout-name').value = user.name || ''; }
+    function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
+    async function placeOrder(event) { event.preventDefault(); const token = localStorage.getItem('token'); const orderData = { items: cartData.items, total: cartData.total, customerName: document.getElementById('checkout-name').value, phone: document.getElementById('checkout-phone').value, address: document.getElementById('checkout-address').value, paymentMethod: document.getElementById('payment-method').value, notes: document.getElementById('order-notes').value }; try { const response = await fetch(`${API_URL}/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(orderData) }); if (response.ok) { const order = await response.json(); alert(`Order placed successfully! Order Number: ${order.orderNumber}`); window.location.href = 'orders.html'; } else { alert('Failed to place order. Please try again.'); } } catch (error) { console.error('Error placing order:', error); alert('Error placing order. Please try again.'); } }
+    function applyPromo() { const code = document.getElementById('promo-code').value.toUpperCase(); if (code === 'ORGANIC10') { alert('Promo code applied! 10% discount'); } else { alert('Invalid promo code'); } }
+    document.addEventListener('DOMContentLoaded', () => { loadCart(); updateCartCount(); });
+  </script>
+</body>
+
+</html>

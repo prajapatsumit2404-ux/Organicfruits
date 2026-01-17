@@ -1,0 +1,27 @@
+{
+  "name": "organicfruits",
+  "version": "1.0.0",
+  "description": "Full-stack e-commerce platform for organic fruits",
+  "scripts": {
+    "start": "node backend/server.js",
+    "seed": "node backend/seed-products.js",
+    "dev": "node backend/server.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "fruits",
+    "mongodb",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.0",
+    "uuid": "^9.0.0"
+  }
+}

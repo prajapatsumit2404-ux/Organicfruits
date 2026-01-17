@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - OG Organic Fruits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .product-card {
+      animation: fadeIn 0.5s ease-out;
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+    }
+
+    .filter-btn {
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-leaf text-green-600 text-3xl"></i>
+          <a href="index.html" class="text-2xl font-bold text-green-600">OG Organic Fruits</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 hover:text-green-600 transition">Home</a>
+          <a href="shop.html" class="text-green-600 font-semibold">Shop</a>
+          <a href="about.html" class="text-gray-700 hover:text-green-600 transition">About</a>
+          <a href="services.html" class="text-gray-700 hover:text-green-600 transition">Services</a>
+          <a href="orders.html" class="text-gray-700 hover:text-green-600 transition">My Orders</a>
+          <a href="notes.html" class="text-gray-700 hover:text-green-600 transition">Notes</a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <a href="cart.html" class="relative text-gray-700 hover:text-green-600 transition">
+            <i class="fas fa-shopping-cart text-2xl"></i>
+            <span id="cart-count"
+              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">0</span>
+          </a>
+
+          <div id="auth-buttons">
+            <a href="login.html"
+              class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-semibold transition">
+              <i class="fas fa-user mr-2"></i>Login
+            </a>
+          </div>
+
+          <div id="user-menu" class="hidden relative">
+            <button onclick="toggleUserDropdown()"
+              class="flex items-center gap-2 text-gray-700 hover:text-green-600 py-2">
+              <i class="fas fa-user-circle text-2xl"></i>
+              <span id="user-name" class="font-semibold"></span>
+              <i class="fas fa-chevron-down text-xs"></i>
+            </button>
+            <div id="user-dropdown"
+              class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 z-50">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold mb-4">Shop Fresh Organic Fruits</h1>
+      <p class="text-xl">Browse our wide selection of premium quality fruits</p>
+    </div>
+  </section>
+
+  <!-- Search and Filter -->
+  <section class="bg-white shadow-md py-6 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <!-- Search Bar -->
+        <div class="relative flex-1 w-full">
+          <input type="text" id="search-input" placeholder="Search fruits..."
+            class="w-full px-6 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-green-500 transition">
+          <button onclick="searchProducts()"
+            class="absolute right-2 top-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full transition">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex gap-2 flex-wrap">
+          <button onclick="filterByCategory('all')"
+            class="filter-btn active px-6 py-2 rounded-full border-2 border-green-600 font-semibold">
+            All
+          </button>
+        </div>
+
+        <!-- Sort -->
+        <select id="sort-select" onchange="sortProducts()"
+          class="px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-green-500">
+          <option value="name">Sort by Name</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Grid -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="products-container" class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <!-- Products will be loaded here -->
+      </div>
+
+      <div id="no-products" class="hidden text-center py-20">
+        <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-2xl font-bold text-gray-600 mb-2">No products found</h3>
+        <p class="text-gray-500">Try adjusting your search or filters</p>
+      </div>
+
+      <div id="loading" class="text-center py-20">
+        <i class="fas fa-spinner fa-spin text-6xl text-green-600"></i>
+        <p class="text-xl text-gray-600 mt-4">Loading products...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <i class="fas fa-leaf text-green-500 text-2xl"></i>
+            <h3 class="text-xl font-bold">OG Organic Fruits</h3>
+          </div>
+          <p class="text-gray-400">Fresh, organic fruits delivered to your doorstep.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Quick Links</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="shop.html" class="hover:text-green-500 transition">Shop</a></li>
+            <li><a href="about.html" class="hover:text-green-500 transition">About Us</a></li>
+            <li><a href="services.html" class="hover:text-green-500 transition">Services</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Customer Service</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="orders.html" class="hover:text-green-500 transition">My Orders</a></li>
+            <li><a href="cart.html" class="hover:text-green-500 transition">Shopping Cart</a></li>
+            <li><a href="notes.html" class="hover:text-green-500 transition">My Notes</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Contact Us</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><i class="fas fa-phone mr-2"></i>+1 (555) 123-4567</li>
+            <li><i class="fas fa-envelope mr-2"></i>info@ogfruits.com</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2026 OG Organic Fruits Shop. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    let allProducts = [];
+    let filteredProducts = [];
+
+    async function loadProducts() {
+      document.getElementById('loading').classList.remove('hidden');
+      try {
+        const data = await getProducts();
+        allProducts = data;
+        filteredProducts = allProducts;
+        displayProducts(allProducts);
+      } catch (e) { console.error('Failed to load products', e); }
+      finally {
+        document.getElementById('loading').classList.add('hidden');
+      }
+    }
+
+    function displayProducts(products) {
+      const container = document.getElementById('products-container');
+      const noProducts = document.getElementById('no-products');
+
+      if (!products || products.length === 0) {
+        container.innerHTML = '';
+        noProducts.classList.remove('hidden');
+        return;
+      }
+
+      noProducts.classList.add('hidden');
+      container.innerHTML = products.map(product => `
+          <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <div class="relative group">
+              <img src="${product.image}" alt="${product.name}" class="w-full h-56 object-cover transform group-hover:scale-110 transition duration-500">
+              ${product.featured ? '<span class="absolute top-4 left-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">Featured</span>' : ''}
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-gray-800">${product.name}</h3>
+                <div class="flex items-center text-yellow-400 text-sm">
+                  <i class="fas fa-star"></i>
+                  <span class="ml-1 text-gray-600 font-semibold">${product.rating || '4.5'}</span>
+                </div>
+              </div>
+              <p class="text-gray-600 mb-4 text-sm line-clamp-2 h-10">${product.description}</p>
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <span class="text-3xl font-bold text-green-600">₹${product.price}</span>
+                  <span class="text-gray-500 text-sm">/ ${product.unit}</span>
+                </div>
+                <span class="text-xs ${product.stock > 20 ? 'text-green-600 bg-green-50' : 'text-orange-600 bg-orange-50'} px-2 py-1 rounded-md font-semibold">
+                  ${product.stock} left
+                </span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <div class="flex items-center border-2 border-gray-100 rounded-full overflow-hidden bg-gray-50">
+                  <button onclick="changeQtyUI('${product.id}', -1)" class="px-3 py-1 hover:bg-gray-200 transition">-</button>
+                  <input id="qty-${product.id}" type="number" min="1" value="1" class="w-10 text-center bg-transparent font-bold text-sm outline-none" />
+                  <button onclick="changeQtyUI('${product.id}', 1)" class="px-3 py-1 hover:bg-gray-200 transition">+</button>
+                </div>
+                <button onclick="addToCartUI('${product.id}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-full font-bold transition flex items-center justify-center gap-2">
+                  <i class="fas fa-cart-plus"></i>Add
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+    }
+
+    function changeQtyUI(id, delta) {
+      const input = document.getElementById(`qty-${id}`);
+      if (input) input.value = Math.max(1, Number(input.value) + delta);
+    }
+
+    function addToCartUI(productId) {
+      const product = allProducts.find(p => p.id === productId);
+      if (!product) return;
+      const qty = Number(document.getElementById(`qty-${productId}`)?.value || 1);
+
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const existing = cart.find(i => i.id === productId);
+      if (existing) {
+        existing.quantity += qty;
+      } else {
+        cart.push({ ...product, quantity: qty });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+
+      const btn = event.currentTarget;
+      const original = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check"></i> OK';
+      btn.classList.replace('bg-green-600', 'bg-gray-800');
+      setTimeout(() => {
+        btn.innerHTML = original;
+        btn.classList.replace('bg-gray-800', 'bg-green-600');
+      }, 1000);
+    }
+
+    function searchProducts() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      filteredProducts = allProducts.filter(product =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm)
+      );
+      displayProducts(filteredProducts);
+    }
+
+    function sortProducts() {
+      const sortValue = document.getElementById('sort-select').value;
+      if (sortValue === 'name') filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+      else if (sortValue === 'price-low') filteredProducts.sort((a, b) => a.price - b.price);
+      else if (sortValue === 'price-high') filteredProducts.sort((a, b) => b.price - a.price);
+      displayProducts(filteredProducts);
+    }
+
+    document.getElementById('search-input').addEventListener('input', searchProducts);
+    document.addEventListener('DOMContentLoaded', loadProducts);
+  </script>
+</body>
+
+</html>

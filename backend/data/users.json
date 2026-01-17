@@ -1,0 +1,58 @@
+[
+  {
+    "id": "e57c87af-4d83-4977-a766-91142c8950e3",
+    "name": "Administrator",
+    "email": "admin@organicfruits.com",
+    "password": "$2a$10$6Zf67hp569dIVvMTzoysuOj9957ck2JbnEHXrEpXUXBt47ZGJscNu",
+    "role": "admin"
+  },
+  {
+    "id": "2a9afb4e-d888-4253-8440-0ad253012095",
+    "name": "QA Tester",
+    "email": "qa+tst@example.com",
+    "password": "$2a$10$1mnnS0QMZKLD1KTae0mZ4eP4ZJf3ZN82.ojotoN8mDljaeTlDRcua",
+    "role": "user"
+  },
+  {
+    "id": "dcffb61f-7e78-4c6a-a097-0b1ff3784e6b",
+    "name": "Administrator",
+    "email": "admin@example.com",
+    "password": "$2a$10$0iFQI1B30hWTdmh3kDdABuc6Fd1caGe0RaHR//KDCogIcpcCT0LV.",
+    "role": "admin"
+  },
+  {
+    "id": "00872a73-fa44-4899-87ee-dfa4757e7fcb",
+    "name": "Terry Tester",
+    "email": "terry@example.com",
+    "password": "$2a$10$XgApP/3bD0uJaryzjGGoj.fjK5q36dil9fTQ5W3IbBjHlih6mN9qy",
+    "role": "user"
+  },
+  {
+    "id": "d1f4ed73-d469-4745-bee0-28a205221112",
+    "name": "Terry Tester Final",
+    "email": "terry_final@example.com",
+    "password": "$2a$10$XFoaWYFqt99HRQc7T/AgBunI5xhhSV4J.svpS2Q/dS6tLQGry9W2i",
+    "role": "user"
+  },
+  {
+    "id": "e8acec26-0ee4-417d-bc5c-ed462f0ae147",
+    "name": "Terry Tester Final",
+    "email": "terry_final@example.com",
+    "password": "$2a$10$MPrVYiyeyqPGMizdHo1fIuMyxRLEsSq8FJ8Y84KDAGjmp48ShPTPO",
+    "role": "user"
+  },
+  {
+    "id": "87792139-8280-40de-896c-c1df61835b3e",
+    "name": "Final Tester",
+    "email": "final@example.com",
+    "password": "$2a$10$MrlrzDHiYZZqRtrvru9xiu/WkqmwW65jq.0pmKphc7CxW.lLdrqhG",
+    "role": "user"
+  },
+  {
+    "id": "0b120cd9-5a14-4001-bc51-e6d6decf8ea7",
+    "name": "rudi",
+    "email": "rudikadam22@gmail.com",
+    "password": "$2a$10$FOWJitDEjvghlr1l.ZQ9TualHP0ZMseh9tDzjsbfDT5Cgkr3GlYNe",
+    "role": "user"
+  }
+]

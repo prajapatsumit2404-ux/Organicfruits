@@ -1,0 +1,17 @@
+{
+  "name": "organicfruits",
+  "version": "1.0.0",
+  "description": "E-commerce platform for organic fruits with MongoDB and Java API",
+  "scripts": {
+    "dev": "echo 'Frontend server: python -m http.server 8000' && echo 'Backend: java OrganicFruitsAPI'",
+    "build": "echo 'Frontend is ready (static HTML/CSS/JS)'",
+    "start": "vercel dev",
+    "deploy": "vercel deploy --prod"
+  },
+  "keywords": ["ecommerce", "fruits", "mongodb", "java"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "latest"
+  }
+}
