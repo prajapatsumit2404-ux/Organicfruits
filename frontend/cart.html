@@ -222,7 +222,6 @@
 
   <script src="assets/js/app.js"></script>
   <script>
-    const API_URL = '/api';
     let cartData = { items: [], total: 0 };
 
     function fmtINR(value) { return Number(value || 0).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }); }
@@ -288,9 +287,69 @@
     function updateSummary() { const subtotal = cartData.items.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item.quantity || 0)), 0); const deliveryFee = subtotal >= 5000 ? 0 : 50; const tax = subtotal * 0.1; const total = subtotal + deliveryFee + tax; document.getElementById('subtotal').textContent = fmtINR(subtotal); document.getElementById('delivery-fee').textContent = deliveryFee === 0 ? 'FREE' : fmtINR(deliveryFee); document.getElementById('tax').textContent = fmtINR(tax); document.getElementById('total').textContent = fmtINR(total); document.getElementById('modal-total').textContent = fmtINR(total); cartData.total = total; }
     async function saveCart() { const token = localStorage.getItem('token'); try { localStorage.setItem('cart', JSON.stringify(cartData.items || [])); } catch (e) { } if (!token) return; try { await fetch(`${API_URL}/cart/update`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(cartData) }); } catch (error) { console.error('Error saving cart to server:', error); } }
     function updateCartCount() { const totalItems = (cartData.items || []).reduce((s, it) => s + (Number(it.quantity || it.qty || 0)), 0); document.getElementById('cart-count').textContent = totalItems; }
-    function proceedToCheckout() { if (!cartData.items || cartData.items.length === 0) { alert('Your cart is empty!'); return; } document.getElementById('checkout-modal').classList.remove('hidden'); const user = JSON.parse(localStorage.getItem('user') || '{}'); document.getElementById('checkout-name').value = user.name || ''; }
+    function proceedToCheckout() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        if (confirm('You need to login to checkout. Go to login page?')) {
+          window.location.href = 'login.html';
+        }
+        return;
+      }
+      if (!cartData.items || cartData.items.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      document.getElementById('checkout-modal').classList.remove('hidden');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      document.getElementById('checkout-name').value = user.name || '';
+    }
     function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
-    async function placeOrder(event) { event.preventDefault(); const token = localStorage.getItem('token'); const orderData = { items: cartData.items, total: cartData.total, customerName: document.getElementById('checkout-name').value, phone: document.getElementById('checkout-phone').value, address: document.getElementById('checkout-address').value, paymentMethod: document.getElementById('payment-method').value, notes: document.getElementById('order-notes').value }; try { const response = await fetch(`${API_URL}/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(orderData) }); if (response.ok) { const order = await response.json(); alert(`Order placed successfully! Order Number: ${order.orderNumber}`); window.location.href = 'orders.html'; } else { alert('Failed to place order. Please try again.'); } } catch (error) { console.error('Error placing order:', error); alert('Error placing order. Please try again.'); } }
+    async function placeOrder(event) {
+      event.preventDefault();
+      const token = localStorage.getItem('token');
+      const name = document.getElementById('checkout-name').value;
+      const phone = document.getElementById('checkout-phone').value;
+      const address = document.getElementById('checkout-address').value;
+
+      const orderData = {
+        items: cartData.items,
+        total: cartData.total,
+        customerName: name,
+        phone: phone,
+        address: address,
+        paymentMethod: document.getElementById('payment-method').value,
+        notes: document.getElementById('order-notes').value
+      };
+
+      try {
+        const response = await fetch(`${API_URL}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify(orderData)
+        });
+
+        if (response.ok) {
+          const order = await response.json();
+
+          // Save details for success page display
+          localStorage.setItem('lastOrderDetails', JSON.stringify({ name, phone, address }));
+
+          // Clear cart
+          cartData.items = [];
+          cartData.total = 0;
+          await saveCart();
+          updateCartCount();
+
+          // Redirect to success page
+          window.location.href = `order-success.html?orderId=${order.id || order._id}`;
+        } else {
+          alert('Failed to place order. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error placing order:', error);
+        alert('Error placing order. Please try again.');
+      }
+    }
     function applyPromo() { const code = document.getElementById('promo-code').value.toUpperCase(); if (code === 'ORGANIC10') { alert('Promo code applied! 10% discount'); } else { alert('Invalid promo code'); } }
     document.addEventListener('DOMContentLoaded', () => { loadCart(); updateCartCount(); });
   </script>

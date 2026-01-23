@@ -54,5 +54,19 @@
     "email": "rudikadam22@gmail.com",
     "password": "$2a$10$FOWJitDEjvghlr1l.ZQ9TualHP0ZMseh9tDzjsbfDT5Cgkr3GlYNe",
     "role": "user"
+  },
+  {
+    "id": "e58def75-2ac9-4478-b1ec-8679c095b3df",
+    "name": "raju",
+    "email": "raju@gmail.com",
+    "password": "$2a$10$njZ/9gtbovOT4hAGZ/SdKuO5IwhITpuiDsGrF1rpu0Bsf.PmoAXhG",
+    "role": "user"
+  },
+  {
+    "id": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "name": "jhon",
+    "email": "kjhbgf@gmail.com",
+    "password": "$2a$10$/9jaNrzJtDi6umrEt9xZ2uvJeshM9ctOT4mYAUj.O3zJ/NAvaysUO",
+    "role": "user"
   }
 ]

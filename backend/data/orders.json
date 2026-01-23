@@ -13,5 +13,212 @@
     "total": 0,
     "status": "pending",
     "createdAt": "2026-01-03T14:47:32.882Z"
+  },
+  {
+    "id": "84bb7beb-d0d1-4943-9736-503407079112",
+    "orderNumber": "ORD-1768818286482",
+    "userId": "e58def75-2ac9-4478-b1ec-8679c095b3df",
+    "items": [
+      {
+        "id": "p1",
+        "name": "Apple",
+        "description": "Crisp organic apples, perfect for snacking.",
+        "category": "fruits",
+        "price": 2.49,
+        "unit": "kg",
+        "stock": 120,
+        "featured": true,
+        "rating": 4.6,
+        "reviews": 54,
+        "image": "assets/images/apple.jpg",
+        "quantity": 1
+      }
+    ],
+    "total": 52.739000000000004,
+    "status": "pending",
+    "createdAt": "2026-01-19T10:24:46.482Z"
+  },
+  {
+    "id": "262e30ea-609e-4ff8-916c-374ece973fc4",
+    "orderNumber": "ORD-1768876361627",
+    "userId": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "items": [
+      {
+        "id": "p1",
+        "name": "Apple",
+        "description": "Crisp organic apples, perfect for snacking.",
+        "category": "fruits",
+        "price": 2.49,
+        "unit": "kg",
+        "stock": 120,
+        "featured": true,
+        "rating": 4.6,
+        "reviews": 54,
+        "image": "assets/images/apple.jpg",
+        "quantity": 9
+      }
+    ],
+    "total": 74.651,
+    "status": "pending",
+    "createdAt": "2026-01-20T02:32:41.627Z"
+  },
+  {
+    "id": "113459fe-6a7c-4eb1-b192-2c019315c306",
+    "orderNumber": "ORD-1768876463178",
+    "userId": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "items": [
+      {
+        "id": "p1",
+        "name": "Apple",
+        "description": "Crisp organic apples, perfect for snacking.",
+        "category": "fruits",
+        "price": 2.49,
+        "unit": "kg",
+        "stock": 120,
+        "featured": true,
+        "rating": 4.6,
+        "reviews": 54,
+        "image": "assets/images/apple.jpg",
+        "quantity": 6
+      },
+      {
+        "id": "p3",
+        "name": "Kiwi",
+        "description": "Tangy green kiwi, full of vitamin C.",
+        "category": "fruits",
+        "price": 3.99,
+        "unit": "kg",
+        "stock": 60,
+        "featured": false,
+        "rating": 4.4,
+        "reviews": 21,
+        "image": "assets/images/kiwi.jpg",
+        "quantity": 13
+      }
+    ],
+    "total": 123.491,
+    "status": "pending",
+    "createdAt": "2026-01-20T02:34:23.178Z"
+  },
+  {
+    "id": "7493707e-cb05-4fe3-971a-891f9e4b7529",
+    "orderNumber": "ORD-1768876661776",
+    "userId": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "items": [
+      {
+        "id": "p3",
+        "name": "Kiwi",
+        "description": "Tangy green kiwi, full of vitamin C.",
+        "category": "fruits",
+        "price": 3.99,
+        "unit": "kg",
+        "stock": 60,
+        "featured": false,
+        "rating": 4.4,
+        "reviews": 21,
+        "image": "assets/images/kiwi.jpg",
+        "quantity": 5
+      },
+      {
+        "id": "p6",
+        "name": "Orange",
+        "description": "Juicy oranges, ideal for fresh-squeezed juice.",
+        "category": "fruits",
+        "price": 2.99,
+        "unit": "kg",
+        "stock": 150,
+        "featured": false,
+        "rating": 4.2,
+        "reviews": 47,
+        "image": "assets/images/orange.jpg",
+        "quantity": 10
+      }
+    ],
+    "total": 104.83500000000001,
+    "status": "pending",
+    "createdAt": "2026-01-20T02:37:41.776Z"
+  },
+  {
+    "id": "9cb0409b-9da2-42f2-a29e-eaa661ba4b42",
+    "orderNumber": "ORD-1768876681683",
+    "userId": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "items": [
+      {
+        "name": "",
+        "qty": 1,
+        "price": 0
+      }
+    ],
+    "total": 0,
+    "status": "pending",
+    "createdAt": "2026-01-20T02:38:01.683Z"
+  },
+  {
+    "id": "88a306d9-622f-4210-8771-1d1b40f92743",
+    "orderNumber": "ORD-1768876684126",
+    "userId": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "items": [
+      {
+        "name": "",
+        "qty": 1,
+        "price": 0
+      }
+    ],
+    "total": 0,
+    "status": "pending",
+    "createdAt": "2026-01-20T02:38:04.126Z"
+  },
+  {
+    "id": "439e374b-cadd-4809-915a-64488f7b07fd",
+    "orderNumber": "ORD-1768876684986",
+    "userId": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "items": [
+      {
+        "name": "",
+        "qty": 1,
+        "price": 0
+      }
+    ],
+    "total": 0,
+    "status": "pending",
+    "createdAt": "2026-01-20T02:38:04.986Z"
+  },
+  {
+    "id": "dad89347-a0d4-4179-9917-2f80578753dd",
+    "orderNumber": "ORD-1768901287838",
+    "userId": "8e99694f-c136-49dd-ae92-8c7dd4fe51ab",
+    "items": [
+      {
+        "id": "p2",
+        "name": "Banana",
+        "description": "Sweet organic bananas, rich in potassium.",
+        "category": "fruits",
+        "price": 1.29,
+        "unit": "kg",
+        "stock": 200,
+        "featured": true,
+        "rating": 4.5,
+        "reviews": 68,
+        "image": "assets/images/banana.jpg",
+        "quantity": 1
+      },
+      {
+        "id": "p1",
+        "name": "Apple",
+        "description": "Crisp organic apples, perfect for snacking.",
+        "category": "fruits",
+        "price": 2.49,
+        "unit": "kg",
+        "stock": 120,
+        "featured": true,
+        "rating": 4.6,
+        "reviews": 54,
+        "image": "assets/images/apple.jpg",
+        "quantity": 2
+      }
+    ],
+    "total": 56.897000000000006,
+    "status": "pending",
+    "createdAt": "2026-01-20T09:28:07.838Z"
   }
 ]

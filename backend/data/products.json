@@ -10,7 +10,7 @@
     "featured": true,
     "rating": 4.6,
     "reviews": 54,
-    "image": "assets/images/apple.svg"
+    "image": "assets/images/apple.jpg"
   },
   {
     "id": "p2",
@@ -23,7 +23,7 @@
     "featured": true,
     "rating": 4.5,
     "reviews": 68,
-    "image": "assets/images/banana.svg"
+    "image": "assets/images/banana.jpg"
   },
   {
     "id": "p3",
@@ -36,7 +36,7 @@
     "featured": false,
     "rating": 4.4,
     "reviews": 21,
-    "image": "https://images.unsplash.com/photo-1585059895524-72359e06133a?w=400"
+    "image": "assets/images/kiwi.jpg"
   },
   {
     "id": "p4",
@@ -49,7 +49,7 @@
     "featured": true,
     "rating": 4.8,
     "reviews": 112,
-    "image": "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400"
+    "image": "assets/images/strawberry.jpg"
   },
   {
     "id": "p5",
@@ -62,7 +62,7 @@
     "featured": false,
     "rating": 4.3,
     "reviews": 34,
-    "image": "https://images.unsplash.com/photo-1599819177626-c0d3b3d0e8c3?w=400"
+    "image": "assets/images/grapes.jpg"
   },
   {
     "id": "p6",
@@ -75,7 +75,7 @@
     "featured": false,
     "rating": 4.2,
     "reviews": 47,
-    "image": "assets/images/orange.svg"
+    "image": "assets/images/orange.jpg"
   },
   {
     "id": "p7",
@@ -85,10 +85,10 @@
     "price": 5.49,
     "unit": "kg",
     "stock": 40,
-    "featured": false,
+    "featured": true,
     "rating": 4.7,
     "reviews": 29,
-    "image": "https://images.unsplash.com/photo-1615485499978-1279c3d6302f?w=400"
+    "image": "assets/images/pomegranate.jpg"
   },
   {
     "id": "p8",
@@ -101,7 +101,7 @@
     "featured": true,
     "rating": 4.5,
     "reviews": 73,
-    "image": "https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=400"
+    "image": "assets/images/coconut-water.jpg"
   },
   {
     "id": "p9",
@@ -114,7 +114,7 @@
     "featured": false,
     "rating": 4.4,
     "reviews": 38,
-    "image": "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400"
+    "image": "assets/images/pineapple.jpg"
   },
   {
     "id": "p10",
@@ -127,7 +127,7 @@
     "featured": false,
     "rating": 4.1,
     "reviews": 18,
-    "image": "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=400"
+    "image": "assets/images/chikoo.jpg"
   },
   {
     "id": "p11",
@@ -140,7 +140,7 @@
     "featured": false,
     "rating": 4.0,
     "reviews": 22,
-    "image": "https://images.unsplash.com/photo-1536657464919-892534f60d6e?w=400"
+    "image": "assets/images/guava.jpg"
   },
   {
     "id": "p12",
@@ -153,7 +153,7 @@
     "featured": false,
     "rating": 4.2,
     "reviews": 27,
-    "image": "https://images.unsplash.com/photo-1617112848923-cc2234396a8d?w=400"
+    "image": "assets/images/papaya.jpg"
   },
   {
     "id": "p13",
@@ -166,6 +166,32 @@
     "featured": true,
     "rating": 4.9,
     "reviews": 210,
-    "image": "assets/images/mango.svg"
+    "image": "assets/images/mango.jpg"
+  },
+  {
+    "id": "p14",
+    "name": "Muskmelon",
+    "description": "Sweet and aromatic muskmelon, fresh from the farm.",
+    "category": "fruits",
+    "price": 3.49,
+    "unit": "each",
+    "stock": 45,
+    "featured": true,
+    "rating": 4.3,
+    "reviews": 12,
+    "image": "assets/images/muskmelon.jpg"
+  },
+  {
+    "id": "p15",
+    "name": "Watermelon",
+    "description": "Juicy and refreshing red watermelon.",
+    "category": "fruits",
+    "price": 4.99,
+    "unit": "each",
+    "stock": 30,
+    "featured": true,
+    "rating": 4.7,
+    "reviews": 89,
+    "image": "assets/images/watermelon.jpg"
   }
 ]

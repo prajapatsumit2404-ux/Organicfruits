@@ -1,40 +1,23 @@
-# Build stage
-FROM openjdk:17-slim AS builder
-
-WORKDIR /build
-
-# Copy Java source files
-COPY OrganicFruitsAPI.java .
-COPY OrganicFruitsServer.java .
-
-# Compile Java files
-RUN javac OrganicFruitsAPI.java OrganicFruitsServer.java
-
----
-
-# Runtime stage
-FROM openjdk:17-slim
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy compiled classes from builder
-COPY --from=builder /build/*.class .
+# Copy root package files
+COPY package*.json ./
 
-# Create non-root user for security
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
-USER appuser
+# Install dependencies
+RUN npm install --production
 
-# Expose ports
-EXPOSE 5000 8000
+# Copy application source code
+COPY backend ./backend
+COPY frontend ./frontend
+COPY api ./api
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD java -version || exit 1
+# Ensure data directory exists
+RUN mkdir -p backend/data
 
-# Set environment variables
-ENV PORT=5000
-ENV MONGODB_URI=""
-ENV NODE_ENV=production
+# Expose port
+EXPOSE 5000
 
-# Run the Java API server
-CMD ["java", "-Xmx256m", "-Xms128m", "OrganicFruitsAPI"]
+# Start the application
+CMD ["npm", "start"]

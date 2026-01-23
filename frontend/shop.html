@@ -257,8 +257,8 @@
                   <input id="qty-${product.id}" type="number" min="1" value="1" class="w-10 text-center bg-transparent font-bold text-sm outline-none" />
                   <button onclick="changeQtyUI('${product.id}', 1)" class="px-3 py-1 hover:bg-gray-200 transition">+</button>
                 </div>
-                <button onclick="addToCartUI('${product.id}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-full font-bold transition flex items-center justify-center gap-2">
-                  <i class="fas fa-cart-plus"></i>Add
+                <button onclick="addToCartUI('${product.id}', event)" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-full font-bold transition flex items-center justify-center gap-2">
+                  <i class="fas fa-cart-plus"></i>Add to Cart
                 </button>
               </div>
             </div>
@@ -271,29 +271,39 @@
       if (input) input.value = Math.max(1, Number(input.value) + delta);
     }
 
-    function addToCartUI(productId) {
+    function addToCartUI(productId, event) {
       const product = allProducts.find(p => p.id === productId);
-      if (!product) return;
-      const qty = Number(document.getElementById(`qty-${productId}`)?.value || 1);
-
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      const existing = cart.find(i => i.id === productId);
-      if (existing) {
-        existing.quantity += qty;
-      } else {
-        cart.push({ ...product, quantity: qty });
+      if (!product) {
+        alert('Product not found');
+        return;
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
+      const qty = Number(document.getElementById(`qty-${productId}`)?.value || 1);
+      
+      if (qty < 1) {
+        alert('Please enter a valid quantity');
+        return;
+      }
 
-      const btn = event.currentTarget;
+      const success = addToCart(product, qty);
+      if (!success) {
+        alert('Failed to add to cart');
+        return;
+      }
+
+      // Get the button that was clicked
+      const btn = event ? event.currentTarget : event.target;
+      if (!btn) return;
+      
       const original = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-check"></i> OK';
-      btn.classList.replace('bg-green-600', 'bg-gray-800');
+      btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+      btn.classList.replace('bg-green-600', 'bg-green-700');
+      btn.disabled = true;
+      
       setTimeout(() => {
         btn.innerHTML = original;
-        btn.classList.replace('bg-gray-800', 'bg-green-600');
-      }, 1000);
+        btn.classList.replace('bg-green-700', 'bg-green-600');
+        btn.disabled = false;
+      }, 1500);
     }
 
     function searchProducts() {

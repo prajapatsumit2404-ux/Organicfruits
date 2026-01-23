@@ -68,7 +68,7 @@
                 </div>
               </div>
               <div class="mt-6 flex gap-4">
-                <button onclick="addToCart()"
+                <button onclick="addToCartWrapper()"
                   class="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition">
                   <i class="fas fa-cart-plus mr-2"></i>Add To Cart
                 </button>
@@ -114,17 +114,10 @@
       document.getElementById('qty').textContent = currentQty;
     }
 
-    function addToCart() {
+    function addToCartWrapper() {
       if (!currentProduct) return;
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      const existing = cart.find(i => i.id === currentProduct.id);
-      if (existing) {
-        existing.quantity += currentQty;
-      } else {
-        cart.push({ ...currentProduct, quantity: currentQty });
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
+      // Use shared function which handles backend sync
+      window.addToCart(currentProduct, currentQty);
       alert('✓ Added to cart!');
     }
 

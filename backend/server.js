@@ -241,6 +241,65 @@ app.get('/api/products', (req, res) => {
   res.json([]);
 });
 
+app.post('/api/products', authMiddleware, (req, res) => {
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin only' });
+  const product = req.body;
+
+  if (mongoConnected) {
+    // Mongo stub
+    return res.status(501).json({ error: 'Mongo create not implemented in stub' });
+  }
+
+  const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
+  let products = [];
+  try { products = JSON.parse(fs.readFileSync(PRODUCTS_FILE, 'utf8')); } catch (e) { }
+
+  const newProduct = { ...product, id: product.id || uuidv4() }; // Ensure ID
+  products.push(newProduct);
+  fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2));
+  res.json(newProduct);
+});
+
+app.put('/api/products/:id', authMiddleware, (req, res) => {
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin only' });
+  const { id } = req.params;
+  const updates = req.body;
+
+  if (mongoConnected) {
+    return res.status(501).json({ error: 'Mongo update not implemented in stub' });
+  }
+
+  const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
+  let products = [];
+  try { products = JSON.parse(fs.readFileSync(PRODUCTS_FILE, 'utf8')); } catch (e) { }
+
+  const index = products.findIndex(p => p.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Product not found' });
+
+  // Update fields
+  products[index] = { ...products[index], ...updates };
+
+  fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2));
+  res.json(products[index]);
+});
+
+app.delete('/api/products/:id', authMiddleware, (req, res) => {
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin only' });
+  const { id } = req.params;
+
+  const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
+  let products = [];
+  try { products = JSON.parse(fs.readFileSync(PRODUCTS_FILE, 'utf8')); } catch (e) { }
+
+  const initialLength = products.length;
+  products = products.filter(p => p.id !== id);
+
+  if (products.length === initialLength) return res.status(404).json({ error: 'Product not found' });
+
+  fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2));
+  res.json({ success: true });
+});
+
 // Notes endpoints (per-user)
 app.get('/api/notes', authMiddleware, (req, res) => {
   if (mongoConnected) {
@@ -329,10 +388,16 @@ app.post('/api/cart/update', authMiddleware, (req, res) => {
 
 app.get('/api/orders', authMiddleware, (req, res) => {
   if (mongoConnected) {
+    if (req.user.role === 'admin') return OrderModel.find().then(d => res.json(d));
     return OrderModel.find({ userId: req.user.id }).then(d => res.json(d)).catch(() => res.json([]));
   }
+
   const ordersFile = path.join(DATA_DIR, 'orders.json');
-  try { const orders = JSON.parse(fs.readFileSync(ordersFile, 'utf8')) || []; return res.json(orders.filter(o => o.userId === req.user.id)); } catch (e) { return res.json([]); }
+  try {
+    const orders = JSON.parse(fs.readFileSync(ordersFile, 'utf8')) || [];
+    if (req.user.role === 'admin') return res.json(orders);
+    return res.json(orders.filter(o => o.userId === req.user.id));
+  } catch (e) { return res.json([]); }
 });
 
 // Final exports and startup logic

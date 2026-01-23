@@ -1,5 +1,6 @@
 // Shared app utilities for OrganicFruits
 const API_URL = '/api';
+let _productCache = null;
 
 function getToken() { return localStorage.getItem('token'); }
 function getUser() {
@@ -13,11 +14,47 @@ function logout() {
   window.location.href = 'login.html';
 }
 
-async function getProducts() {
+async function getProducts(forceRefresh = false) {
+  if (_productCache && !forceRefresh) return _productCache;
   try {
     const res = await fetch(`${API_URL}/products`);
-    return res.ok ? await res.json() : [];
+    if (res.ok) {
+      _productCache = await res.json();
+      return _productCache;
+    }
+    return [];
   } catch (e) { return []; }
+}
+
+function addToCart(product, quantity = 1) {
+  if (!product || !product.id) {
+    console.error('Invalid product');
+    return false;
+  }
+  
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const existing = cart.find(i => i.id === product.id);
+  
+  if (existing) {
+    existing.quantity = (Number(existing.quantity) || 0) + Number(quantity);
+  } else {
+    cart.push({ ...product, quantity: Number(quantity) });
+  }
+  
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+
+  // Background sync if logged in
+  const token = getToken();
+  if (token) {
+    fetch(`${API_URL}/cart/update`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ items: cart })
+    }).catch(e => console.warn('Cart sync failed:', e));
+  }
+  
+  return true;
 }
 
 async function login(credentials) {
@@ -83,7 +120,7 @@ function updateCartCount() {
   if (!countEl) return;
   try {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
     countEl.textContent = count;
   } catch (e) { countEl.textContent = '0'; }
 }
@@ -104,6 +141,8 @@ window.getToken = getToken;
 window.getUser = getUser;
 window.isAdmin = isAdmin;
 window.logout = logout;
+window.getProducts = getProducts;
+window.addToCart = addToCart;
 window.login = login;
 window.register = register;
 window.toggleUserDropdown = toggleUserDropdown;

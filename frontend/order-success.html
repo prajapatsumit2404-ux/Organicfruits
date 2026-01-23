@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success - OG Organic Fruits</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            80% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .check-icon {
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row">
+
+        <!-- Success Message Section -->
+        <div class="p-8 md:p-12 flex-1 relative overflow-hidden">
+            <!-- Confetti Background Effect -->
+            <div class="absolute inset-0 z-0 opacity-10"
+                style="background-image: radial-gradient(circle, #10b981 2px, transparent 2.5px); background-size: 20px 20px;">
+            </div>
+
+            <div class="relative z-10 text-center md:text-left">
+                <div class="flex justify-center md:justify-start mb-6">
+                    <div class="bg-green-100 rounded-full p-4 check-icon">
+                        <i class="fas fa-check text-4xl text-green-600"></i>
+                    </div>
+                </div>
+
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Order Successfully Placed!</h1>
+                <p class="text-gray-600 mb-8">Thank you for your purchase. Your order has been received.</p>
+
+                <!-- Order Summary -->
+                <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-100">
+                    <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-200">
+                        <span class="text-gray-600">Order Number</span>
+                        <span id="order-id" class="font-bold text-gray-800">#LOADING</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-600">Total Amount</span>
+                        <span id="order-total" class="text-2xl font-bold text-green-600">...</span>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <h4 class="font-semibold text-gray-700 text-sm uppercase tracking-wider">Delivery Details</h4>
+                        <p id="user-name" class="text-gray-800 font-medium"></p>
+                        <p id="user-address" class="text-gray-600 text-sm"></p>
+                        <p id="user-phone" class="text-gray-600 text-sm"></p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <a href="shop.html"
+                        class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition text-center">
+                        Continue Shopping
+                    </a>
+                    <a href="my-orders.html"
+                        class="flex-1 bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition text-center">
+                        View Orders
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment QR Section -->
+        <div
+            class="bg-gradient-to-br from-green-600 to-green-800 p-8 md:p-12 text-white md:w-96 flex flex-col justify-center items-center">
+            <h2 class="text-2xl font-bold mb-6 text-center">Pay via UPI</h2>
+            <div class="bg-white p-4 rounded-2xl shadow-lg mb-6 transform hover:scale-105 transition duration-300">
+                <div id="qrcode"></div>
+            </div>
+            <p class="text-green-100 text-center text-sm mb-4">Scan this QR code with any UPI app (GPay, PhonePe, Paytm)
+                to complete your payment.</p>
+
+            <div class="flex items-center gap-2 text-green-100 text-xs bg-white/10 px-4 py-2 rounded-full">
+                <i class="fas fa-lock"></i> Secure Payment
+            </div>
+        </div>
+
+    </div>
+
+    <script src="assets/js/app.js"></script>
+    <script>
+        async function loadOrderDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('orderId');
+
+            if (!orderId) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const token = getToken();
+                // Fetch specific order (filtering from list since ID endpoint might not exist)
+                const response = await fetch('/api/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const orders = await response.json();
+                    // Find order by ID or OrderNumber or just the latest one
+                    const order = orders.find(o => o.id === orderId || o._id === orderId) || orders[orders.length - 1]; // Fallback to latest
+
+                    if (order) {
+                        // Update UI
+                        document.getElementById('order-id').textContent = order.orderNumber || order.id.slice(0, 8).toUpperCase();
+
+                        // Handle various total formats (string/number)
+                        const amount = Number(order.total || 0);
+                        document.getElementById('order-total').textContent = amount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+
+                        // Extract items summary if needed (optional)
+
+                        // If details were saved in order object (optional feature), display them. 
+                        // Otherwise show current user details from local storage as fallback
+                        const user = getUser();
+                        const localDetails = JSON.parse(localStorage.getItem('lastOrderDetails') || '{}');
+
+                        document.getElementById('user-name').textContent = localDetails.name || user.name || 'Valued Customer';
+                        document.getElementById('user-address').textContent = localDetails.address || 'Address provided at checkout';
+                        document.getElementById('user-phone').textContent = localDetails.phone || '';
+
+                        // Generate UPI QR Code
+                        // Format: upi://pay?pa=MERCHANT_VPA&pn=MERCHANT_NAME&am=AMOUNT
+                        // Using a test VPA
+                        const upiString = `upi://pay?pa=shop@organicfruits&pn=OrganicFruits&am=${amount}&cu=INR`;
+
+                        new QRCode(document.getElementById("qrcode"), {
+                            text: upiString,
+                            width: 180,
+                            height: 180,
+                            colorDark: "#000000",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading order:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOrderDetails);
+    </script>
+</body>
+
+</html>

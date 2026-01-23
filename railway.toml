@@ -2,7 +2,7 @@
 builder = "dockerfile"
 
 [deploy]
-startCommand = "java OrganicFruitsAPI"
-healthcheckUrl = "http://localhost:5000/api/health"
-restartPolicyType = "always"
+startCommand = "npm start"
+healthcheckUrl = "/api/health"
+restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 5
