@@ -13,7 +13,7 @@ Your e-commerce platform is now set up with **MongoDB Atlas** cloud database! Al
 │                     Your Browser                             │
 ├─────────────────────────────────────────────────────────────┤
 │                          ↓                                   │
-│  Frontend (Java HTTP Server - Port 8000)                    │
+│  Frontend (Served by Java Backend - Port 5000)                │
 │  ├─ index.html (Home)                                       │
 │  ├─ shop.html (Product Catalog)                            │
 │  ├─ login.html (Auth)                                       │
@@ -79,23 +79,23 @@ Your e-commerce platform is now set up with **MongoDB Atlas** cloud database! Al
 1. Go to "Clusters"
 2. Click "Connect"
 3. Select "Drivers"
-4. Choose "Node.js"
+4. Choose "Java"
 5. Copy the connection string (looks like: mongodb+srv://...)
 ```
 
 ### Step 6: Update Backend Configuration
 ```
-1. Open: backend/.env
-2. Find: MONGODB_URI=...
+1. Open: backend-java/src/main/resources/application.properties
+2. Find: spring.data.mongodb.uri=...
 3. Paste your connection string
-4. Replace PASSWORD with your actual password
+4. Replace <password> with your actual password
 5. Save the file
 ```
 
 ### Step 7: Restart Backend
 ```bash
-cd e:\hotwax\backend
-npm start
+# In the root directory:
+.\run-java-backend.bat
 ```
 
 You should see: ✅ Connected to MongoDB
@@ -112,36 +112,20 @@ You should see: ✅ Connected to MongoDB
 ## 📁 Your Project Files
 
 ```
-e:\hotwax/
-├── Frontend (Java Server)
+e:\og\OG_fruits/
+├── Frontend
 │   ├── index.html
-│   ├── login.html
-│   ├── shop.html
-│   ├── admin_dashboard.html
-│   ├── cart.html
-│   ├── product.html
-│   ├── about.html
-│   ├── services.html
-│   ├── contact.html
 │   ├── assets/js/app.js
-│   ├── OrganicFruitsServer.java
-│   ├── STATUS_DASHBOARD.html
-│   └── MONGODB_ATLAS_GUIDE.html
+│   └── STATUS_DASHBOARD.html
 │
-├── Backend (Java API)
-│   ├── OrganicFruitsAPI.java
-│   ├── OrganicFruitsServer.java (static file server)
-│   └── See Java sources for build/run instructions
+├── Backend (Java Spring Boot)
+│   ├── src/main/java/com/organicfruits/api/...
+│   ├── pom.xml
+│   └── src/main/resources/application.properties
 │
-└── Documentation
-    ├── MONGODB_ATLAS_SETUP.md
-    ├── MONGODB_ATLAS_QUICK.md
-    ├── ATLAS_CONFIGURED.md
-    ├── PROJECT_STRUCTURE.md
-    ├── SETUP_MONGODB.md
-    ├── START_ALL.bat
-    ├── CONFIGURE_ATLAS.bat
-    └── test-connection.sh
+└── Scripts
+    ├── run-java-backend.bat
+    └── docker-compose.yml
 ```
 
 ---
@@ -272,13 +256,13 @@ GET    /api/orders/:id           - Get order details
 
 | Problem | Solution |
 |---------|----------|
-| "Connection refused" | Backend not running. Run `npm start` in backend folder |
+| "Connection refused" | Java Backend not running. Run `run-java-backend.bat` |
 | "Authentication failed" | Check password in connection string |
 | "IP not whitelisted" | Add your IP in MongoDB Atlas Network Access |
 | "Database connection timeout" | Check internet, verify connection string |
 | "Password contains special chars" | URL encode them (@ = %40, # = %23, etc.) |
-| "Can't login" | Register with `admin@example.com` for admin account |
-| "Products not showing" | Need to register first, then seed data from admin panel |
+| "Can't login" | Register with `admin@organicfruits.com` for admin account |
+| "Products not showing" | Ensure backend successfully connected to DB |
 
 ---
 

@@ -58,6 +58,7 @@
           <a href="about.html" class="text-gray-700 hover:text-green-600 transition">About</a>
           <a href="services.html" class="text-gray-700 hover:text-green-600 transition">Services</a>
           <a href="orders.html" class="text-gray-700 hover:text-green-600 transition">My Orders</a>
+          <a href="contact.html" class="text-gray-700 hover:text-green-600 transition">Contact</a>
           <a href="notes.html" class="text-gray-700 hover:text-green-600 transition">Notes</a>
         </div>
 
@@ -215,6 +216,14 @@
       }
     }
 
+    function getProductImage(img) {
+      if (!img) return 'https://via.placeholder.com/400x300?text=No+Image';
+      if (img.startsWith('http') || img.startsWith('data:') || img.startsWith('/') || img.startsWith('assets/')) {
+        return img;
+      }
+      return `assets/images/${img}`;
+    }
+
     function displayProducts(products) {
       const container = document.getElementById('products-container');
       const noProducts = document.getElementById('no-products');
@@ -229,7 +238,10 @@
       container.innerHTML = products.map(product => `
           <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
             <div class="relative group">
-              <img src="${product.image}" alt="${product.name}" class="w-full h-56 object-cover transform group-hover:scale-110 transition duration-500">
+              <img src="${getProductImage(product.image)}" 
+                   alt="${product.name}" 
+                   onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name)}'"
+                   class="w-full h-56 object-cover transform group-hover:scale-110 transition duration-500">
               ${product.featured ? '<span class="absolute top-4 left-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">Featured</span>' : ''}
             </div>
             <div class="p-6">
@@ -278,7 +290,7 @@
         return;
       }
       const qty = Number(document.getElementById(`qty-${productId}`)?.value || 1);
-      
+
       if (qty < 1) {
         alert('Please enter a valid quantity');
         return;
@@ -293,12 +305,12 @@
       // Get the button that was clicked
       const btn = event ? event.currentTarget : event.target;
       if (!btn) return;
-      
+
       const original = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-check"></i> Added!';
       btn.classList.replace('bg-green-600', 'bg-green-700');
       btn.disabled = true;
-      
+
       setTimeout(() => {
         btn.innerHTML = original;
         btn.classList.replace('bg-green-700', 'bg-green-600');

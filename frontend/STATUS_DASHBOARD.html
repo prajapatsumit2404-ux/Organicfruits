@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OrganicFruits - System Status</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gradient-to-br from-green-50 to-blue-50">
     <div class="min-h-screen py-8 px-4">
         <div class="max-w-6xl mx-auto">
@@ -43,12 +45,13 @@
                         <span class="text-3xl">⚙️</span>
                     </div>
                     <div class="space-y-2">
-                        <p class="text-gray-600">Node.js/Express</p>
+                        <p class="text-gray-600">Java / Spring Boot</p>
                         <div class="bg-green-100 text-green-800 px-3 py-2 rounded font-semibold text-center">
                             ✅ Running
                         </div>
                         <p class="text-sm text-gray-600 text-center mt-2">
-                            <a href="http://localhost:5000/api/health" target="_blank" class="text-blue-600 hover:underline">
+                            <a href="http://localhost:5000/api/health" target="_blank"
+                                class="text-blue-600 hover:underline">
                                 http://localhost:5000
                             </a>
                         </p>
@@ -63,7 +66,8 @@
                     </div>
                     <div class="space-y-2">
                         <p class="text-gray-600">MongoDB Atlas</p>
-                        <div id="dbStatus" class="bg-yellow-100 text-yellow-800 px-3 py-2 rounded font-semibold text-center">
+                        <div id="dbStatus"
+                            class="bg-yellow-100 text-yellow-800 px-3 py-2 rounded font-semibold text-center">
                             ⏳ Checking...
                         </div>
                         <p class="text-xs text-gray-600 text-center mt-2">Cloud Database</p>
@@ -74,7 +78,7 @@
             <!-- Configuration Section -->
             <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">📋 Configuration</h2>
-                
+
                 <div class="grid md:grid-cols-2 gap-6">
                     <!-- Environment Variables -->
                     <div>
@@ -85,22 +89,27 @@
                             <p><span class="text-blue-600">NODE_ENV</span>=development</p>
                             <p><span class="text-blue-600">CORS_ORIGIN</span>=http://localhost:8000</p>
                         </div>
-                        <p class="text-xs text-gray-600 mt-2">Located in: <code class="bg-gray-100 px-2 py-1 rounded">backend/.env</code></p>
+                        <p class="text-xs text-gray-600 mt-2">Located in: <code
+                                class="bg-gray-100 px-2 py-1 rounded">backend-java/src/main/resources/application.properties</code>
+                        </p>
                     </div>
 
                     <!-- Quick Links -->
                     <div>
                         <h3 class="font-bold text-gray-700 mb-3">Quick Access</h3>
                         <div class="space-y-2">
-                            <a href="http://localhost:8000" target="_blank" class="block bg-green-50 hover:bg-green-100 border-l-4 border-green-600 p-3 rounded transition">
+                            <a href="http://localhost:8000" target="_blank"
+                                class="block bg-green-50 hover:bg-green-100 border-l-4 border-green-600 p-3 rounded transition">
                                 <p class="font-semibold text-green-700">🏠 Home</p>
                                 <p class="text-sm text-gray-600">localhost:8000</p>
                             </a>
-                            <a href="http://localhost:8000/shop.html" target="_blank" class="block bg-green-50 hover:bg-green-100 border-l-4 border-green-600 p-3 rounded transition">
+                            <a href="http://localhost:8000/shop.html" target="_blank"
+                                class="block bg-green-50 hover:bg-green-100 border-l-4 border-green-600 p-3 rounded transition">
                                 <p class="font-semibold text-green-700">🛒 Shop</p>
                                 <p class="text-sm text-gray-600">localhost:8000/shop.html</p>
                             </a>
-                            <a href="http://localhost:8000/login.html" target="_blank" class="block bg-blue-50 hover:bg-blue-100 border-l-4 border-blue-600 p-3 rounded transition">
+                            <a href="http://localhost:8000/login.html" target="_blank"
+                                class="block bg-blue-50 hover:bg-blue-100 border-l-4 border-blue-600 p-3 rounded transition">
                                 <p class="font-semibold text-blue-700">🔐 Login</p>
                                 <p class="text-sm text-gray-600">localhost:8000/login.html</p>
                             </a>
@@ -116,28 +125,34 @@
                 <div class="bg-white rounded p-4 font-mono text-center">
                     <p class="text-blue-600 font-semibold text-lg">admin@example.com</p>
                 </div>
-                <p class="text-blue-900 text-sm mt-4">Any password works. This email automatically creates an admin account with access to the admin dashboard.</p>
+                <p class="text-blue-900 text-sm mt-4">Any password works. This email automatically creates an admin
+                    account with access to the admin dashboard.</p>
             </div>
 
             <!-- MongoDB Atlas Setup -->
             <div class="bg-purple-50 border-l-4 border-purple-600 rounded-lg p-6 mb-8">
                 <h3 class="text-xl font-bold text-purple-900 mb-3">🌩️ MongoDB Atlas Configuration</h3>
-                
+
                 <div class="space-y-4">
                     <div class="bg-white rounded p-4">
                         <h4 class="font-semibold text-gray-800 mb-2">✅ Status</h4>
                         <p class="text-gray-700">Backend is configured and ready to connect to MongoDB Atlas.</p>
-                        <p class="text-sm text-gray-600 mt-2">File: <code class="bg-gray-100 px-2 py-1 rounded">backend/.env</code></p>
+                        <p class="text-sm text-gray-600 mt-2">File: <code
+                                class="bg-gray-100 px-2 py-1 rounded">backend-java/src/main/resources/application.properties</code>
+                        </p>
                     </div>
 
                     <div class="bg-white rounded p-4">
                         <h4 class="font-semibold text-gray-800 mb-2">📝 Next Steps</h4>
                         <ol class="list-decimal list-inside space-y-2 text-gray-700">
-                            <li>Go to <a href="https://www.mongodb.com/cloud/atlas" target="_blank" class="text-blue-600 hover:underline">MongoDB Atlas</a></li>
+                            <li>Go to <a href="https://www.mongodb.com/cloud/atlas" target="_blank"
+                                    class="text-blue-600 hover:underline">MongoDB Atlas</a></li>
                             <li>Create free account and cluster</li>
                             <li>Create database user</li>
                             <li>Copy connection string</li>
-                            <li>Update <code class="bg-gray-100 px-1">backend/.env</code></li>
+                            <li>Update <code
+                                    class="bg-gray-100 px-1">backend-java/src/main/resources/application.properties</code>
+                            </li>
                             <li>Restart backend</li>
                         </ol>
                     </div>
@@ -145,10 +160,14 @@
                     <div class="bg-white rounded p-4">
                         <h4 class="font-semibold text-gray-800 mb-2">📚 Documentation</h4>
                         <ul class="space-y-1 text-gray-700 text-sm">
-                            <li>📖 <a href="MONGODB_ATLAS_SETUP.md" class="text-blue-600 hover:underline">Detailed Setup Guide</a></li>
-                            <li>⚡ <a href="MONGODB_ATLAS_QUICK.md" class="text-blue-600 hover:underline">Quick Reference</a></li>
-                            <li>🎨 <a href="MONGODB_ATLAS_GUIDE.html" class="text-blue-600 hover:underline">Visual Setup Guide</a></li>
-                            <li>🏗️ <a href="PROJECT_STRUCTURE.md" class="text-blue-600 hover:underline">Architecture Overview</a></li>
+                            <li>📖 <a href="MONGODB_ATLAS_SETUP.md" class="text-blue-600 hover:underline">Detailed Setup
+                                    Guide</a></li>
+                            <li>⚡ <a href="MONGODB_ATLAS_QUICK.md" class="text-blue-600 hover:underline">Quick
+                                    Reference</a></li>
+                            <li>🎨 <a href="MONGODB_ATLAS_GUIDE.html" class="text-blue-600 hover:underline">Visual Setup
+                                    Guide</a></li>
+                            <li>🏗️ <a href="PROJECT_STRUCTURE.md" class="text-blue-600 hover:underline">Architecture
+                                    Overview</a></li>
                         </ul>
                     </div>
                 </div>
@@ -157,7 +176,7 @@
             <!-- API Endpoints -->
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">🔌 API Endpoints</h2>
-                
+
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="font-bold text-gray-700 mb-2">🔐 Authentication</h3>
@@ -213,7 +232,7 @@
                     method: 'GET',
                     headers: { 'Accept': 'application/json' }
                 });
-                
+
                 if (response.ok) {
                     const data = await response.json();
                     document.getElementById('dbStatus').innerHTML = '✅ Connected';
@@ -232,4 +251,5 @@
         setInterval(checkDatabaseStatus, 5000);
     </script>
 </body>
+
 </html>

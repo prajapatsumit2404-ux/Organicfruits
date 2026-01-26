@@ -40,6 +40,8 @@
         <div class="flex items-center space-x-6">
           <a href="index.html" class="text-gray-700 hover:text-green-600">Home</a>
           <a href="shop.html" class="text-gray-700 hover:text-green-600">Shop</a>
+          <a href="orders.html" class="text-gray-700 hover:text-green-600">My Orders</a>
+          <a href="contact.html" class="text-gray-700 hover:text-green-600">Contact</a>
           <a href="cart.html" class="text-green-600 font-semibold relative">
             <i class="fas fa-shopping-cart text-xl"></i>
             <span id="cart-count"
@@ -220,6 +222,102 @@
     </div>
   </div>
 
+  <!-- Payment Modal -->
+  <div id="payment-modal"
+    class="hidden fixed inset-0 bg-black bg-opacity-60 z-[60] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden relative">
+      <button onclick="closePayment()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+
+      <div class="bg-gray-50 border-b p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Secure Payment</h3>
+        <p class="text-sm text-gray-500 mt-1">Total to Pay: <span id="pay-amount"
+            class="text-green-600 font-bold text-lg"></span></p>
+      </div>
+
+      <div class="p-6">
+        <!-- Tab Headers -->
+        <div class="flex border-b mb-6">
+          <button onclick="switchPaymentTab('upi')" id="tab-upi"
+            class="flex-1 pb-3 text-center border-b-2 border-green-600 font-semibold text-green-700">UPI / QR</button>
+          <button onclick="switchPaymentTab('card')" id="tab-card"
+            class="flex-1 pb-3 text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700">Card</button>
+        </div>
+
+        <!-- UPI Tab -->
+        <div id="pay-upi" class="pay-tab">
+          <div class="text-center">
+            <div class="bg-white p-4 border-2 border-dashed border-gray-300 rounded-xl inline-block mb-4 relative">
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=organicfruits@upi&pn=OrganicFruits&am=100"
+                alt="UPI QR" class="w-40 h-40 opacity-50 transition-opacity duration-500" id="qr-img">
+              <div id="qr-overlay"
+                class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 font-bold text-green-600">
+                Scan to Pay
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4">Scan with any UPI App (GPay, PhonePe, Paytm)</p>
+            <div class="bg-yellow-50 text-yellow-800 text-xs px-3 py-2 rounded-lg mb-4">
+              <i class="fas fa-clock mr-1"></i> Time remaining: <span id="timer">05:00</span>
+            </div>
+            <button onclick="simulateSuccess('upi')"
+              class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition">
+              I have paid
+            </button>
+          </div>
+        </div>
+
+        <!-- Card Tab -->
+        <div id="pay-card" class="pay-tab hidden">
+          <form onsubmit="event.preventDefault(); simulateSuccess('card');">
+            <div class="mb-4">
+              <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Card Number</label>
+              <div class="relative">
+                <input type="text" placeholder="0000 0000 0000 0000"
+                  class="w-full border-2 border-gray-200 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:border-green-500 transition">
+                <i class="fas fa-credit-card absolute left-3 top-3 text-gray-400"></i>
+              </div>
+            </div>
+            <div class="flex gap-4 mb-6">
+              <div class="flex-1">
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Expiry</label>
+                <input type="text" placeholder="MM/YY"
+                  class="w-full border-2 border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-green-500 transition">
+              </div>
+              <div class="flex-1">
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-1">CVV</label>
+                <input type="password" placeholder="123"
+                  class="w-full border-2 border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:border-green-500 transition">
+              </div>
+            </div>
+            <button type="submit"
+              class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg">
+              Pay Securely
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Processing State -->
+      <div id="pay-processing" class="absolute inset-0 bg-white z-20 hidden flex flex-col items-center justify-center">
+        <div class="w-16 h-16 border-4 border-green-200 border-t-green-600 rounded-full animate-spin mb-4"></div>
+        <h4 class="text-xl font-bold text-gray-800">Processing Payment...</h4>
+        <p class="text-gray-500 text-sm mt-2">Please do not close this window</p>
+      </div>
+
+      <!-- Success State -->
+      <div id="pay-success"
+        class="absolute inset-0 bg-green-500 z-30 hidden flex flex-col items-center justify-center text-white p-8 text-center animate-slideIn">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6">
+          <i class="fas fa-check text-4xl text-green-500"></i>
+        </div>
+        <h4 class="text-3xl font-bold mb-2">Payment Successful!</h4>
+        <p class="opacity-90">Redirecting to order confirmation...</p>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/js/app.js"></script>
   <script>
     let cartData = { items: [], total: 0 };
@@ -302,6 +400,8 @@
       document.getElementById('checkout-modal').classList.remove('hidden');
       const user = JSON.parse(localStorage.getItem('user') || '{}');
       document.getElementById('checkout-name').value = user.name || '';
+      document.getElementById('checkout-phone').value = user.phone || '9926700362'; // Pre-fill for ease
+      document.getElementById('checkout-address').value = user.address || 'H.No 123, Ring Road, Indore';
     }
     function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
     async function placeOrder(event) {
@@ -321,6 +421,67 @@
         notes: document.getElementById('order-notes').value
       };
 
+      // Check payment method
+      if (orderData.paymentMethod !== 'cod') {
+        openPaymentModal(orderData);
+      } else {
+        submitOrder(orderData);
+      }
+    }
+
+    // Payment Logic
+    let currentOrderPayload = null;
+
+    function openPaymentModal(data) {
+      currentOrderPayload = data;
+      document.getElementById('checkout-modal').classList.add('hidden');
+      document.getElementById('payment-modal').classList.remove('hidden');
+      document.getElementById('pay-amount').textContent = fmtINR(data.total);
+
+      // Simulate QR generation
+      setTimeout(() => {
+        document.getElementById('qr-img').style.opacity = '1';
+        document.getElementById('qr-overlay').style.display = 'none';
+      }, 1000);
+    }
+
+    function closePayment() {
+      document.getElementById('payment-modal').classList.add('hidden');
+      document.getElementById('checkout-modal').classList.remove('hidden');
+    }
+
+    function switchPaymentTab(tab) {
+      document.querySelectorAll('.pay-tab').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`pay-${tab}`).classList.remove('hidden');
+
+      // Tabs style
+      const btnUpi = document.getElementById('tab-upi');
+      const btnCard = document.getElementById('tab-card');
+
+      if (tab === 'upi') {
+        btnUpi.className = 'flex-1 pb-3 text-center border-b-2 border-green-600 font-semibold text-green-700';
+        btnCard.className = 'flex-1 pb-3 text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700';
+      } else {
+        btnCard.className = 'flex-1 pb-3 text-center border-b-2 border-blue-600 font-semibold text-blue-700';
+        btnUpi.className = 'flex-1 pb-3 text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700';
+      }
+    }
+
+    function simulateSuccess(method) {
+      const processing = document.getElementById('pay-processing');
+      processing.classList.remove('hidden');
+
+      setTimeout(() => {
+        // Assume success
+        document.getElementById('pay-success').classList.remove('hidden');
+        setTimeout(() => {
+          submitOrder(currentOrderPayload);
+        }, 1500);
+      }, 2000);
+    }
+
+    async function submitOrder(orderData) {
+      const token = localStorage.getItem('token');
       try {
         const response = await fetch(`${API_URL}/orders`, {
           method: 'POST',

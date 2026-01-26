@@ -1,64 +1,44 @@
 version: '3.8'
 
 services:
-  # MongoDB Atlas connection (external service, just for reference)
-  # Note: MongoDB Atlas is in the cloud, not running locally
-  # Uncomment below to use local MongoDB instead
-  # mongodb:
-  #   image: mongo:7.0
-  #   container_name: organicfruits-mongo
-  #   ports:
-  #     - "27017:27017"
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: organicfruits
-  #     MONGO_INITDB_ROOT_PASSWORD: yourpassword
-  #   volumes:
-  #     - mongodb_data:/data/db
+  mongodb:
+    image: mongo:7.0
+    container_name: organicfruits-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - og-network
 
-  # Backend Java API
-  api:
+  backend:
     build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: organicfruits-api
+      context: ./backend-java
+    container_name: organicfruits-java-api
     ports:
       - "5000:5000"
     environment:
-      PORT: 5000
-      MONGODB_URI: ${MONGODB_URI:-mongodb+srv://user:password@cluster.mongodb.net/organicfruits}
-      NODE_ENV: ${NODE_ENV:-development}
-      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/organicfruits
+      - APP_JWT_SECRET=your_very_long_random_secret_key_for_production
     depends_on:
-      - frontend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      - mongodb
+    networks:
+      - og-network
 
-  # Frontend Web Server
   frontend:
-    image: node:18-alpine
-    container_name: organicfruits-frontend
-    working_dir: /app
-    volumes:
-      - .:/app
-      - /app/node_modules
+    build:
+      context: ./frontend
+    container_name: organicfruits-web
     ports:
-      - "3000:3000"
-    command: npx http-server . -p 3000 -c-1
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-volumes:
-  mongodb_data:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - og-network
 
 networks:
-  default:
-    name: organicfruits-network
+  og-network:
+    driver: bridge
+
+volumes:
+  mongo_data:

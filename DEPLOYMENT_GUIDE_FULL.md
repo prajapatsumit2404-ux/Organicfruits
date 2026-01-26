@@ -3,8 +3,7 @@
 This guide will help you deploy your application to the web.
 
 ## 🛑 Critical Warning: Data Storage
-Your app currently saves data (Users, Cart, Orders) to **local text files** in `backend/data/`.
-*   **On Cloud Hosting**, these files are **deleted** every time you deploy or restart.
+On Cloud Hosting, files can be ephemeral. Use **MongoDB Atlas** for permanent data storage.
 *   **Solution**: You MUST use **MongoDB Atlas** for permanent data storage.
 
 ---
@@ -66,6 +65,6 @@ Your app currently saves data (Users, Cart, Orders) to **local text files** in `
 
 ### Troubleshooting
 *   **"Connection Failed"**: Check your `MONGODB_URI` in the dashboard settings. Ensure you allowed "Anywhere 0.0.0.0/0" in MongoDB Network Access.
-*   **Images missing?**: Vercel serves `frontend/` automatically via `vercel.json`, but ensure your image paths are correct (e.g., `assets/images/apple.jpg`).
+*   **Images missing?**: Vercel serves `frontend/` automatically, but ensure your image paths are correct (e.g., `assets/images/apple.jpg`).
 
 **Good luck!** 🍎
