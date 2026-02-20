@@ -14,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
+    {}
 
     @Autowired
     private CartRepository cartRepository;
