@@ -115,10 +115,10 @@
         </div>
 
         <!-- Category Filters -->
-        <div class="flex gap-2 flex-wrap">
-          <button onclick="filterByCategory('all')"
-            class="filter-btn active px-6 py-2 rounded-full border-2 border-green-600 font-semibold">
-            All
+        <div id="category-filters" class="flex gap-2 flex-wrap">
+          <button onclick="filterByCategory('all')" data-cat="all"
+            class="filter-btn active px-4 py-2 rounded-full border-2 border-green-600 font-semibold text-sm">
+            🌿 All
           </button>
         </div>
 
@@ -202,6 +202,16 @@
   <script>
     let allProducts = [];
     let filteredProducts = [];
+    let activeCategory = 'all';
+
+    const CATEGORY_ICONS = {
+      fruits: '🍎',
+      vegetables: '🥦',
+      beverages: '🥤',
+      dairy: '🥛',
+      snacks: '🍿',
+      'dry-fruits': '🥜',
+    };
 
     async function loadProducts() {
       document.getElementById('loading').classList.remove('hidden');
@@ -209,11 +219,51 @@
         const data = await getProducts();
         allProducts = data;
         filteredProducts = allProducts;
+        buildCategoryFilters();
         displayProducts(allProducts);
       } catch (e) { console.error('Failed to load products', e); }
       finally {
         document.getElementById('loading').classList.add('hidden');
       }
+    }
+
+    function buildCategoryFilters() {
+      const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
+      const container = document.getElementById('category-filters');
+      if (!container) return;
+      const catBtns = categories.map(cat => {
+        const icon = CATEGORY_ICONS[cat] || '🛒';
+        return `<button onclick="filterByCategory('${cat}')" data-cat="${cat}"
+          class="filter-btn px-4 py-2 rounded-full border-2 border-gray-300 font-semibold text-sm capitalize">
+          ${icon} ${cat.replace('-', ' ')}
+        </button>`;
+      }).join('');
+      container.innerHTML = `
+        <button onclick="filterByCategory('all')" data-cat="all"
+          class="filter-btn active px-4 py-2 rounded-full border-2 border-green-600 font-semibold text-sm">
+          🌿 All
+        </button>
+        ${catBtns}`;
+    }
+
+    function filterByCategory(category) {
+      activeCategory = category;
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      });
+      const activeBtn = document.querySelector(`[data-cat="${category}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      filteredProducts = allProducts.filter(p => {
+        const matchCat = category === 'all' || p.category === category;
+        const matchSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm) || (p.description || '').toLowerCase().includes(searchTerm);
+        return matchCat && matchSearch;
+      });
+      displayProducts(filteredProducts);
     }
 
     function getProductImage(img) {
@@ -235,47 +285,49 @@
       }
 
       noProducts.classList.add('hidden');
-      container.innerHTML = products.map(product => `
-          <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-            <div class="relative group">
-              <img src="${getProductImage(product.image)}" 
-                   alt="${product.name}" 
-                   onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name)}'"
-                   class="w-full h-56 object-cover transform group-hover:scale-110 transition duration-500">
-              ${product.featured ? '<span class="absolute top-4 left-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">Featured</span>' : ''}
+      container.innerHTML = products.map(product => {
+        const pid = product.id || product._id;
+        return `
+        <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <div class="relative group">
+            <img src="${getProductImage(product.image)}" 
+                 alt="${product.name}" 
+                 onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name)}'"
+                 class="w-full h-56 object-cover transform group-hover:scale-110 transition duration-500">
+            ${product.featured ? '<span class="absolute top-4 left-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">⭐ Featured</span>' : ''}
+            <span class="absolute top-4 right-4 bg-white text-gray-700 text-xs px-2 py-1 rounded-full shadow capitalize">${CATEGORY_ICONS[product.category] || ''} ${product.category || ''}</span>
+          </div>
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-lg font-bold text-gray-800 leading-tight">${product.name}</h3>
+              <div class="flex items-center text-yellow-400 text-xs flex-shrink-0 ml-2">
+                <i class="fas fa-star"></i>
+                <span class="ml-1 text-gray-600 font-semibold">${product.rating || '4.5'}</span>
+              </div>
             </div>
-            <div class="p-6">
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="text-xl font-bold text-gray-800">${product.name}</h3>
-                <div class="flex items-center text-yellow-400 text-sm">
-                  <i class="fas fa-star"></i>
-                  <span class="ml-1 text-gray-600 font-semibold">${product.rating || '4.5'}</span>
-                </div>
+            <p class="text-gray-500 mb-3 text-sm line-clamp-2">${product.description || ''}</p>
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <span class="text-2xl font-bold text-green-600">₹${product.price}</span>
+                <span class="text-gray-400 text-xs">/ ${product.unit || 'unit'}</span>
               </div>
-              <p class="text-gray-600 mb-4 text-sm line-clamp-2 h-10">${product.description}</p>
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <span class="text-3xl font-bold text-green-600">₹${product.price}</span>
-                  <span class="text-gray-500 text-sm">/ ${product.unit}</span>
-                </div>
-                <span class="text-xs ${product.stock > 20 ? 'text-green-600 bg-green-50' : 'text-orange-600 bg-orange-50'} px-2 py-1 rounded-md font-semibold">
-                  ${product.stock} left
-                </span>
+              <span class="text-xs ${(product.stock || 0) > 20 ? 'text-green-600 bg-green-50' : 'text-orange-600 bg-orange-50'} px-2 py-1 rounded-md font-semibold">
+                ${product.stock || 0} left
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="flex items-center border-2 border-gray-100 rounded-full overflow-hidden bg-gray-50">
+                <button onclick="changeQtyUI('${pid}', -1)" class="px-3 py-1 hover:bg-gray-200 transition font-bold">-</button>
+                <input id="qty-${pid}" type="number" min="1" value="1" class="w-10 text-center bg-transparent font-bold text-sm outline-none" />
+                <button onclick="changeQtyUI('${pid}', 1)" class="px-3 py-1 hover:bg-gray-200 transition font-bold">+</button>
               </div>
-
-              <div class="flex items-center gap-2">
-                <div class="flex items-center border-2 border-gray-100 rounded-full overflow-hidden bg-gray-50">
-                  <button onclick="changeQtyUI('${product.id}', -1)" class="px-3 py-1 hover:bg-gray-200 transition">-</button>
-                  <input id="qty-${product.id}" type="number" min="1" value="1" class="w-10 text-center bg-transparent font-bold text-sm outline-none" />
-                  <button onclick="changeQtyUI('${product.id}', 1)" class="px-3 py-1 hover:bg-gray-200 transition">+</button>
-                </div>
-                <button onclick="addToCartUI('${product.id}', event)" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-full font-bold transition flex items-center justify-center gap-2">
-                  <i class="fas fa-cart-plus"></i>Add to Cart
-                </button>
-              </div>
+              <button onclick="addToCartUI('${pid}', event)" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-full font-bold transition flex items-center justify-center gap-2 text-sm">
+                <i class="fas fa-cart-plus"></i>Add
+              </button>
             </div>
           </div>
-        `).join('');
+        </div>`
+      }).join('');
     }
 
     function changeQtyUI(id, delta) {
@@ -284,33 +336,20 @@
     }
 
     function addToCartUI(productId, event) {
-      const product = allProducts.find(p => p.id === productId);
-      if (!product) {
-        alert('Product not found');
-        return;
-      }
+      const product = allProducts.find(p => (p.id || p._id) === productId);
+      if (!product) { alert('Product not found'); return; }
       const qty = Number(document.getElementById(`qty-${productId}`)?.value || 1);
-
-      if (qty < 1) {
-        alert('Please enter a valid quantity');
-        return;
-      }
+      if (qty < 1) { alert('Please enter a valid quantity'); return; }
 
       const success = addToCart(product, qty);
-      if (!success) {
-        alert('Failed to add to cart');
-        return;
-      }
+      if (!success) { alert('Failed to add to cart'); return; }
 
-      // Get the button that was clicked
-      const btn = event ? event.currentTarget : event.target;
+      const btn = event ? event.currentTarget : null;
       if (!btn) return;
-
       const original = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-check"></i> Added!';
       btn.classList.replace('bg-green-600', 'bg-green-700');
       btn.disabled = true;
-
       setTimeout(() => {
         btn.innerHTML = original;
         btn.classList.replace('bg-green-700', 'bg-green-600');
@@ -319,12 +358,7 @@
     }
 
     function searchProducts() {
-      const searchTerm = document.getElementById('search-input').value.toLowerCase();
-      filteredProducts = allProducts.filter(product =>
-        product.name.toLowerCase().includes(searchTerm) ||
-        product.description.toLowerCase().includes(searchTerm)
-      );
-      displayProducts(filteredProducts);
+      filterByCategory(activeCategory);
     }
 
     function sortProducts() {

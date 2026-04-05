@@ -31,16 +31,16 @@ function addToCart(product, quantity = 1) {
     console.error('Invalid product');
     return false;
   }
-  
+
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
   const existing = cart.find(i => i.id === product.id);
-  
+
   if (existing) {
     existing.quantity = (Number(existing.quantity) || 0) + Number(quantity);
   } else {
     cart.push({ ...product, quantity: Number(quantity) });
   }
-  
+
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
 
@@ -53,7 +53,7 @@ function addToCart(product, quantity = 1) {
       body: JSON.stringify({ items: cart })
     }).catch(e => console.warn('Cart sync failed:', e));
   }
-  
+
   return true;
 }
 
@@ -136,9 +136,15 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartCount();
 });
 
+// getCurrentUser - alias for getUser for backward compatibility
+function getCurrentUser() {
+  return getUser();
+}
+
 // Export to window
 window.getToken = getToken;
 window.getUser = getUser;
+window.getCurrentUser = getCurrentUser;
 window.isAdmin = isAdmin;
 window.logout = logout;
 window.getProducts = getProducts;

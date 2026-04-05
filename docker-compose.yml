@@ -18,8 +18,8 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/organicfruits
-      - APP_JWT_SECRET=your_very_long_random_secret_key_for_production
+      - MONGODB_URI=mongodb://mongodb:27017/organicfruits
+      - APP_JWT_SECRET=${JWT_SECRET:-your_very_long_random_secret_key_for_production_change_me}
     depends_on:
       - mongodb
     networks:
