@@ -1,16 +1,15 @@
 # Dockerfile for Java Spring Boot Backend
-FROM eclipse-temurin:21-jdk
-
+### --- Multi-stage build: Maven for build, Temurin for runtime ---
+# Build stage
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY backend-java/pom.xml .
+COPY backend-java/src ./src
+RUN mvn clean package -DskipTests
 
-# Copy Maven and project files
-COPY backend-java/apache-maven-3.9.6 /app/apache-maven-3.9.6
-COPY backend-java/pom.xml /app/pom.xml
-COPY backend-java/src /app/src
-
-# Build the application
-RUN /app/apache-maven-3.9.6/bin/mvn clean package -DskipTests
-
-# Run the application
+# Runtime stage
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 5000
-CMD ["/app/apache-maven-3.9.6/bin/mvn", "spring-boot:run"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
