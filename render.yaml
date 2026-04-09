@@ -7,7 +7,7 @@ services:
     dockerfilePath: ./backend-java/Dockerfile
     envVars:
       - key: MONGODB_URI
-        value: mongodb+srv://username:password@cluster0.mongodb.net/organicfruits
+        value: mongodb+srv://sumit:C6ug9QY0HAHvrGTc@cluster0.wlhenqg.mongodb.net/?appName=Cluster0
       - key: APP_JWT_SECRET
         value: your_secret_key
 
@@ -16,4 +16,4 @@ services:
     env: docker
     plan: free
     dockerContext: ./frontend
-    dockerfilePath: ./backend-java/Dockerfile
+    dockerfilePath: ./frontend/Dockerfile
