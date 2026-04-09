@@ -1,0 +1,41 @@
+[
+    {
+        "id": "p1",
+        "name": "Apple",
+        "price": 120.0,
+        "category": "fruits",
+        "image": "assets/images/apple.jpg",
+        "description": "Crisp organic apples, perfect for snacking.",
+        "featured": true,
+        "unit": "kg",
+        "stock": 120,
+        "rating": 4.6,
+        "reviews": 54
+    },
+    {
+        "id": "p2",
+        "name": "Banana",
+        "price": 50.0,
+        "category": "fruits",
+        "image": "assets/images/banana.jpg",
+        "description": "Sweet organic bananas, rich in potassium.",
+        "featured": true,
+        "unit": "dozen",
+        "stock": 200,
+        "rating": 4.5,
+        "reviews": 68
+    },
+    {
+        "id": "p3",
+        "name": "Kiwi",
+        "price": 100.0,
+        "category": "fruits",
+        "image": "assets/images/kiwi.jpg",
+        "description": "Tangy green kiwi, full of vitamin C.",
+        "featured": false,
+        "unit": "box",
+        "stock": 60,
+        "rating": 4.4,
+        "reviews": 21
+    }
+]
