@@ -1,16 +1,7 @@
 version: '3.8'
+version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:7.0
-    container_name: organicfruits-db
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - og-network
-
   backend:
     build:
       context: ./backend-java
@@ -18,13 +9,8 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/organicfruits
+      - MONGODB_URI=YOUR_ATLAS_URI_HERE
       - APP_JWT_SECRET=${JWT_SECRET:-your_very_long_random_secret_key_for_production_change_me}
-    depends_on:
-      - mongodb
-    networks:
-      - og-network
-
   frontend:
     build:
       context: ./frontend
@@ -33,12 +19,3 @@ services:
       - "8080:80"
     depends_on:
       - backend
-    networks:
-      - og-network
-
-networks:
-  og-network:
-    driver: bridge
-
-volumes:
-  mongo_data:
