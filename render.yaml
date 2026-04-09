@@ -4,6 +4,7 @@ services:
     env: docker
     plan: free
     dockerContext: ./backend-java
+    dockerfilePath: ./backend-java/Dockerfile
     envVars:
       - key: MONGODB_URI
         value: mongodb+srv://username:password@cluster0.mongodb.net/organicfruits
@@ -15,3 +16,4 @@ services:
     env: docker
     plan: free
     dockerContext: ./frontend
+    dockerfilePath: ./backend-java/Dockerfile
