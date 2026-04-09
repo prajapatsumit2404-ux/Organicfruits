@@ -1,21 +1,17 @@
 services:
-  - name: backend
-    type: web
+  - type: web
+    name: backend
     env: docker
-    build:
-      context: ./backend-java
-    ports:
-      - "5000:5000"
+    plan: free
+    dockerContext: ./backend-java
     envVars:
       - key: MONGODB_URI
-        value: mongodb+srv://username:password@cluster0.mongodb.net/organicfruits?retryWrites=true&w=majority
+        value: mongodb+srv://username:password@cluster0.mongodb.net/organicfruits
       - key: APP_JWT_SECRET
         value: your_secret_key
 
-  - name: frontend
-    type: web
+  - type: web
+    name: frontend
     env: docker
-    build:
-      context: ./frontend
-    ports:
-      - "8080:80"
+    plan: free
+    dockerContext: ./frontend
