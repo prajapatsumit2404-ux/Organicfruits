@@ -1,5 +1,5 @@
 // Shared app utilities for OrganicFruits
-const API_URL = '/api';
+const API_URL = 'https://backend-ejdy.onrender.com/api';
 let _productCache = null;
 
 function getToken() { return localStorage.getItem('token'); }
